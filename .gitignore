@@ -1,0 +1,12 @@
+# Node.js
+frontend/node_modules
+frontend/.next
+
+# Ruby on Rails
+backend/log/*
+backend/tmp/*
+backend/.bundle
+
+# General
+*.env
+*.DS_Store
