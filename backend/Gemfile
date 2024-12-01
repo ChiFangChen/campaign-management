@@ -46,4 +46,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
-
+group :development, :production do
+  # Protect against abusive requests and rate limit clients
+  gem "rack-attack"
+end
