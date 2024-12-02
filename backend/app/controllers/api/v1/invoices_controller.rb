@@ -1,42 +1,24 @@
 class Api::V1::InvoicesController < ApplicationController
-  before_action :set_campaign
-
   def index
-    invoices = @campaign.invoices
-    render json: invoices
-  end
+    invoices = Invoice.includes(:line_items, :campaign).all
 
-  def create
-    invoice = @campaign.invoices.new(invoice_params)
-    if invoice.save
-      render json: invoice, status: :created
-    else
-      render json: invoice.errors, status: :unprocessable_entity
-    end
-  end
+    render json: invoices.map { |invoice|
+      total_amount = invoice.line_items.sum(&:actual_amount).to_f + invoice.adjustments.to_f
 
-  def update
-    invoice = Invoice.find(params[:id])
-    if invoice.update(invoice_params)
-      render json: invoice
-    else
-      render json: invoice.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    invoice = Invoice.find(params[:id])
-    invoice.destroy
-    head :no_content
-  end
-
-  private
-
-  def set_campaign
-    @campaign = Campaign.find(params[:campaign_id])
-  end
-
-  def invoice_params
-    params.require(:invoice).permit(:adjustments, :total_amount)
+      {
+        id: invoice.id,
+        campaign: {
+          id: invoice.campaign.id,
+          name: invoice.campaign.name
+        },
+        line_items: invoice.line_items.map { |line_item| 
+          {
+            id: line_item.id,
+            name: line_item.name
+          }
+        },
+        total_amount: total_amount.round(2)
+      }
+    }
   end
 end

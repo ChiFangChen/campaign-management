@@ -13,22 +13,25 @@ require 'json'
 file_path = Rails.root.join('db', 'data', 'placements_teaser_data.json')
 data = JSON.parse(File.read(file_path))
 
-data.group_by { |record| record["campaign_id"] }.each do |campaign_id, records|
-  campaign_name = records.first["campaign_name"]
-  campaign = Campaign.create!(name: campaign_name)
+InvoiceLineItem.destroy_all
+Invoice.destroy_all
+LineItem.destroy_all
+Campaign.destroy_all
 
-  records.each do |record|
-    line_item = LineItem.create!(
-      campaign: campaign,
-      name: record["line_item_name"],
-      booked_amount: record["booked_amount"],
-      actual_amount: record["actual_amount"]
-    )
+data.each do |entry|
+  campaign = Campaign.find_or_create_by!(id: entry["campaign_id"], name: entry["campaign_name"])
 
-    Invoice.create!(
-      campaign: campaign,
-      adjustments: record["adjustments"],
-      total_amount: line_item.actual_amount + record["adjustments"]
-    )
-  end
+  line_item = campaign.line_items.create!(
+    id: entry["id"],
+    name: entry["line_item_name"],
+    booked_amount: entry["booked_amount"],
+    actual_amount: entry["actual_amount"],
+  )
+  
+  invoice = campaign.invoices.create!(
+    id: entry["id"],
+    adjustments: entry["adjustments"],
+  )
+
+  InvoiceLineItem.create!(invoice: invoice, line_item: line_item)
 end

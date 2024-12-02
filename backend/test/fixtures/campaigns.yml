@@ -2,12 +2,6 @@
 
 one:
   name: MyString
-  client_name: MyString
-  total_budget: 9.99
-  status: MyString
 
 two:
   name: MyString
-  client_name: MyString
-  total_budget: 9.99
-  status: MyString

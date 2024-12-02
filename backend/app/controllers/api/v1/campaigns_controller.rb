@@ -1,41 +1,47 @@
 class Api::V1::CampaignsController < ApplicationController
   def index
-    campaigns = Campaign.all
-    render json: campaigns
+    campaigns = Campaign.includes(line_items: { invoices: :line_items }).all
+
+    render json: campaigns.map { |campaign|
+      booked_total_amount = campaign.line_items.sum(&:booked_amount).round(2)
+      actual_total_amount = campaign.line_items.sum(&:actual_amount).round(2)
+      line_items_count = campaign.line_items.size
+      invoices_count = campaign.line_items.flat_map(&:invoices).uniq.size
+
+      {
+        id: campaign.id,
+        name: campaign.name,
+        booked_total_amount: booked_total_amount,
+        actual_total_amount: actual_total_amount,
+        line_items_count: line_items_count,
+        invoices_count: invoices_count
+      }
+    }
   end
 
   def show
-    campaign = Campaign.find(params[:id])
-    render json: campaign, include: [:line_items, :invoices]
-  end
+    campaign = Campaign.includes(line_items: { invoices: :line_items }).find(params[:id])
 
-  def create
-    campaign = Campaign.new(campaign_params)
-    if campaign.save
-      render json: campaign, status: :created
-    else
-      render json: campaign.errors, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    campaign = Campaign.find(params[:id])
-    if campaign.update(campaign_params)
-      render json: campaign
-    else
-      render json: campaign.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    campaign = Campaign.find(params[:id])
-    campaign.destroy
-    head :no_content
-  end
-
-  private
-
-  def campaign_params
-    params.require(:campaign).permit(:name, :client_name, :total_budget, :status)
+    render json: {
+      id: campaign.id,
+      name: campaign.name,
+      line_items: campaign.line_items.map do |line_item|
+        {
+          id: line_item.id,
+          name: line_item.name,
+          booked_amount: line_item.booked_amount,
+          actual_amount: line_item.actual_amount
+        }
+      end,
+      invoices: campaign.line_items.flat_map(&:invoices).uniq.map do |invoice|
+        {
+          id: invoice.id,
+          adjustments: invoice.adjustments,
+          line_items: invoice.line_items
+        }
+      end
+    }
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Campaign not found' }, status: :not_found
   end
 end
