@@ -49,4 +49,7 @@ end
 group :development, :production do
   # Protect against abusive requests and rate limit clients
   gem "rack-attack"
+
+  # Handle Cross-Origin Resource Sharing (CORS)
+  gem "rack-cors"
 end

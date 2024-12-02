@@ -7,7 +7,11 @@ class Rack::Attack
     ["127.0.0.1", "::1"].include?(req.ip)
   end
 
-  self.throttled_response = ->(env) {
-    [ 429, { "Content-Type" => "text/plain" }, ["Rate limit exceeded. Try again later.\n"]]
+  self.throttled_responder = ->(request) {
+    [
+      429,
+      { "Content-Type" => "text/plain" },
+      ["Rate limit exceeded. Try again later.\n"]
+    ]
   }
 end
