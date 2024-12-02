@@ -1,2 +1,3 @@
 export * from './useForm';
-export * from './use-mobile';
+export * from './usePagination';
+export type { UsePaginationReturn } from './usePagination';

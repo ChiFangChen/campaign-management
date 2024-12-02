@@ -1,9 +1,15 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { useCampaigns } from '@/queries/campaigns';
 import { Title, Table } from '@/components';
+import { usePagination } from '@/hooks';
 
 export const Campaigns = () => {
-  const { data, isLoading, isFetching } = useCampaigns();
+  const paginationState = usePagination();
+  const { data, isLoading, isFetching } = useCampaigns({
+    page: paginationState.pagination.pageIndex,
+    per_page: paginationState.pagination.pageSize,
+  });
+
   console.log(data);
   const columns: ColumnDef<Campaign>[] = [
     {
@@ -30,9 +36,13 @@ export const Campaigns = () => {
   return (
     <div>
       <Title>Campaigns</Title>
-      <div className="container mx-auto py-10">
-        <Table columns={columns} data={data} isFetching={isFetching} isLoading={isLoading} />
-      </div>
+      <Table
+        columns={columns}
+        data={data}
+        isFetching={isFetching}
+        isLoading={isLoading}
+        paginationState={paginationState}
+      />
     </div>
   );
 };

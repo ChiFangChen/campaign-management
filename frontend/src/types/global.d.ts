@@ -3,6 +3,11 @@ declare global {
     children?: ReactNode;
   };
 
+  type PaginationParams = {
+    page: number;
+    per_page: number;
+  };
+
   type Campaign = {
     id: number;
     name: string;

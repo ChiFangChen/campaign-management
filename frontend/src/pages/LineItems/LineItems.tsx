@@ -1,9 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { useLineItems } from '@/queries/line-items';
 import { Title, Table } from '@/components';
+import { usePagination } from '@/hooks';
 
 export const LineItems = () => {
-  const { data, isLoading, isFetching } = useLineItems();
+  const paginationState = usePagination();
+  const { data, isLoading, isFetching } = useLineItems({ page: 1, per_page: 10 });
   console.log(data);
   const columns: ColumnDef<LineItem>[] = [
     {
@@ -30,9 +32,13 @@ export const LineItems = () => {
   return (
     <div>
       <Title>Line Items</Title>
-      <div className="container mx-auto py-10">
-        <Table columns={columns} data={data} isFetching={isFetching} isLoading={isLoading} />
-      </div>
+      <Table
+        columns={columns}
+        data={data}
+        isFetching={isFetching}
+        isLoading={isLoading}
+        paginationState={paginationState}
+      />
     </div>
   );
 };

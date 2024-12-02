@@ -1,20 +1,26 @@
 class Api::V1::CampaignsController < ApplicationController
   def index
-    campaigns = Campaign.includes(line_items: { invoices: :line_items }).all
+    campaigns = Campaign.includes(line_items: { invoices: :line_items }).page(params[:page]).per(params[:per_page] || 10)
 
-    render json: campaigns.map { |campaign|
-      booked_total_amount = campaign.line_items.sum(&:booked_amount).round(2)
-      actual_total_amount = campaign.line_items.sum(&:actual_amount).round(2)
-      line_items_count = campaign.line_items.size
-      invoices_count = campaign.line_items.flat_map(&:invoices).uniq.size
+    render json: {
+      current_page: campaigns.current_page,
+      total_pages: campaigns.total_pages,
+      total_count: campaigns.total_count,
 
-      {
-        id: campaign.id,
-        name: campaign.name,
-        booked_total_amount: booked_total_amount,
-        actual_total_amount: actual_total_amount,
-        line_items_count: line_items_count,
-        invoices_count: invoices_count
+      data: campaigns.map { |campaign|
+        booked_total_amount = campaign.line_items.sum(&:booked_amount).round(2)
+        actual_total_amount = campaign.line_items.sum(&:actual_amount).round(2)
+        line_items_count = campaign.line_items.size
+        invoices_count = campaign.line_items.flat_map(&:invoices).uniq.size
+
+        {
+          id: campaign.id,
+          name: campaign.name,
+          booked_total_amount: booked_total_amount,
+          actual_total_amount: actual_total_amount,
+          line_items_count: line_items_count,
+          invoices_count: invoices_count
+        }
       }
     }
   end

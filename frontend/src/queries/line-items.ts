@@ -1,19 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import axiosInstance from './api/axios';
 import { LineItemsAPI } from './api';
+import { getAllKeys, getDetailKeys } from './utils';
+
+const moduleName = 'line-items';
 
 export const LineItemsQueryKeys = {
-  all: ['line-items'],
-  detail: (id: string) => ['line-items', id],
+  all: getAllKeys(moduleName),
+  detail: getDetailKeys(moduleName),
 };
 
-export const fetchLineItems = async () => {
-  const response = await axiosInstance.get(LineItemsAPI.list);
+export const fetchLineItems = async (paginationParams: PaginationParams) => {
+  const response = await axiosInstance.get(LineItemsAPI.list, { params: paginationParams });
   return response.data;
 };
 
-export const useLineItems = () =>
-  useQuery({ queryKey: LineItemsQueryKeys.all, queryFn: fetchLineItems });
+export const useLineItems = (paginationParams: PaginationParams) =>
+  useQuery({
+    queryKey: LineItemsQueryKeys.all(paginationParams),
+    queryFn: () => fetchLineItems(paginationParams),
+    placeholderData: keepPreviousData,
+  });
 
 export const fetchLineItemDetail = async (id: string) => {
   const response = await axiosInstance.get(LineItemsAPI.detail(id));

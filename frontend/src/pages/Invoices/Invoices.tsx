@@ -1,9 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { useInvoices } from '@/queries/invoices';
 import { Title, Table } from '@/components';
+import { usePagination } from '@/hooks';
 
 export const Invoices = () => {
-  const { data, isLoading, isFetching } = useInvoices();
+  const paginationState = usePagination();
+  const { data, isLoading, isFetching } = useInvoices({ page: 1, per_page: 10 });
   console.log(data);
   const columns: ColumnDef<Invoice>[] = [
     {
@@ -26,9 +28,13 @@ export const Invoices = () => {
   return (
     <div>
       <Title>Invoices</Title>
-      <div className="container mx-auto py-10">
-        <Table columns={columns} data={data} isFetching={isFetching} isLoading={isLoading} />
-      </div>
+      <Table
+        columns={columns}
+        data={data}
+        isFetching={isFetching}
+        isLoading={isLoading}
+        paginationState={paginationState}
+      />
     </div>
   );
 };
