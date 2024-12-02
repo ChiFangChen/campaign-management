@@ -60,7 +60,7 @@ export const AppSidebar = () => {
       <SidebarHeader className="p-4">Campaign Management</SidebarHeader>
       <SidebarContent>
         {routesItems.map(({ label, items }) => (
-          <SidebarGroup key={label}>
+          <SidebarGroup key={label || 'key'}>
             {label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
             <SidebarGroupContent>
               <SidebarMenu>

@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { Layout } from '@/components';
 import { Dashboard } from '@/pages/Dashboard';
 import { Campaigns } from '@/pages/Campaigns';
-import { InlineItems } from '@/pages/InlineItems';
+import { LineItems } from '@/pages/LineItems';
 import { Invoices } from '@/pages/Invoices';
 
 export const routes = {
@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
     children: [
       { path: routes.dashboard, element: <Dashboard /> },
       { path: routes.campaigns, element: <Campaigns /> },
-      { path: routes.inlineItems, element: <InlineItems /> },
+      { path: routes.inlineItems, element: <LineItems /> },
       { path: routes.invoices, element: <Invoices /> },
       {
         path: '*',

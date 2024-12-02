@@ -1,4 +1,4 @@
-import { useForm as ReactHookFormUseForm } from 'react-hook-form';
+import { useForm as RHFUseForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -9,8 +9,8 @@ export const useForm = ({
   ...restConfigs
 }: {
   schema: yup.AnyObjectSchema;
-} & Parameters<typeof ReactHookFormUseForm>) => {
-  return ReactHookFormUseForm<FormData<typeof schema>>({
+} & Parameters<typeof RHFUseForm>) => {
+  return RHFUseForm<FormData<typeof schema>>({
     resolver: yupResolver(schema),
     ...restConfigs,
   });

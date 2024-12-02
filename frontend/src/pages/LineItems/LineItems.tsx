@@ -1,25 +1,25 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { useCampaigns } from '@/queries/campaigns';
+import { useLineItems } from '@/queries/line-items';
 import { Title, Table } from '@/components';
 
-export const Campaigns = () => {
-  const { data, isLoading, isFetching } = useCampaigns();
+export const LineItems = () => {
+  const { data, isLoading, isFetching } = useLineItems();
   console.log(data);
-  const columns: ColumnDef<Campaign>[] = [
+  const columns: ColumnDef<LineItem>[] = [
     {
       accessorKey: 'name',
       header: 'Name',
     },
     {
-      accessorKey: 'line_items_count',
-      header: 'Line Item Count',
+      accessorKey: 'campaign.name',
+      header: 'Campaign',
     },
     {
-      accessorKey: 'booked_total_amount',
+      accessorKey: 'booked_amount',
       header: 'Booked Amount',
     },
     {
-      accessorKey: 'actual_total_amount',
+      accessorKey: 'actual_amount',
       header: 'Actual Amount',
     },
     {
@@ -29,7 +29,7 @@ export const Campaigns = () => {
   ];
   return (
     <div>
-      <Title>Campaigns</Title>
+      <Title>Line Items</Title>
       <div className="container mx-auto py-10">
         <Table columns={columns} data={data} isFetching={isFetching} isLoading={isLoading} />
       </div>
