@@ -1,11 +1,15 @@
 class Api::V1::CampaignsController < ApplicationController
   def index
-    campaigns = Campaign.includes(line_items: { invoices: :line_items }).page(params[:page]).per(params[:per_page] || 10)
+    campaigns = Campaign.includes(line_items: { invoices: :line_items })
+                        .page((params[:page_index].to_i || 0) + 1)
+                        .per(params[:page_size] || 10)
 
     render json: {
-      current_page: campaigns.current_page,
-      total_pages: campaigns.total_pages,
-      total_count: campaigns.total_count,
+      pagination: {
+        current_page: campaigns.current_page,
+        total_pages: campaigns.total_pages,
+        total_count: campaigns.total_count,
+      },
 
       data: campaigns.map { |campaign|
         booked_total_amount = campaign.line_items.sum(&:booked_amount).round(2)

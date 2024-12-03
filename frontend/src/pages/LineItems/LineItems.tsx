@@ -5,7 +5,7 @@ import { usePagination } from '@/hooks';
 
 export const LineItems = () => {
   const paginationState = usePagination();
-  const { data, isLoading, isFetching } = useLineItems({ page: 1, per_page: 10 });
+  const { data, isLoading, isFetching } = useLineItems(paginationState.pagination);
   console.log(data);
   const columns: ColumnDef<LineItem>[] = [
     {
@@ -17,15 +17,15 @@ export const LineItems = () => {
       header: 'Campaign',
     },
     {
-      accessorKey: 'booked_amount',
+      accessorKey: 'bookedAmount',
       header: 'Booked Amount',
     },
     {
-      accessorKey: 'actual_amount',
+      accessorKey: 'actualAmount',
       header: 'Actual Amount',
     },
     {
-      accessorKey: 'invoices_count',
+      accessorKey: 'invoicesCount',
       header: 'Invoice Count',
     },
   ];

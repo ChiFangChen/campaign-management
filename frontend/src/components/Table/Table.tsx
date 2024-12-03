@@ -14,7 +14,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Loader } from '@/components/Loader';
-import { Button } from '@/components/ui/button';
 import { UsePaginationReturn } from '@/hooks';
 import { SkeletonCell } from './SkeletonCell';
 import { Pagination } from './Pagination';
@@ -22,9 +21,11 @@ import { Pagination } from './Pagination';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data?: {
-    current_page: number;
-    total_pages: number;
-    total_count: number;
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      totalCount: number;
+    };
     data: TData[];
   };
   isLoading?: boolean;
@@ -42,7 +43,7 @@ export const Table = <TData, TValue>({
   const table = useReactTable({
     data: data?.data || [],
     columns,
-    pageCount: data?.total_pages || 0,
+    pageCount: data?.pagination.totalPages || 0,
     manualPagination: true,
     state: { pagination: paginationState.pagination },
     onPaginationChange: paginationState.setPagination,

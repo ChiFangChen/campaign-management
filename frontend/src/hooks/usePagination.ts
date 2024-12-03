@@ -1,13 +1,8 @@
 import { useState } from 'react';
 
-type PaginationState = {
-  pageIndex: number;
-  pageSize: number;
-};
-
 export type UsePaginationReturn = {
-  pagination: PaginationState;
-  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
+  pagination: PaginationParams;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationParams>>;
 };
 
 export function usePagination() {

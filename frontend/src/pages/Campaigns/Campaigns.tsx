@@ -5,10 +5,7 @@ import { usePagination } from '@/hooks';
 
 export const Campaigns = () => {
   const paginationState = usePagination();
-  const { data, isLoading, isFetching } = useCampaigns({
-    page: paginationState.pagination.pageIndex,
-    per_page: paginationState.pagination.pageSize,
-  });
+  const { data, isLoading, isFetching } = useCampaigns(paginationState.pagination);
 
   console.log(data);
   const columns: ColumnDef<Campaign>[] = [
@@ -17,19 +14,19 @@ export const Campaigns = () => {
       header: 'Name',
     },
     {
-      accessorKey: 'line_items_count',
+      accessorKey: 'lineItemsCount',
       header: 'Line Item Count',
     },
     {
-      accessorKey: 'booked_total_amount',
+      accessorKey: 'bookedTotalAmount',
       header: 'Booked Amount',
     },
     {
-      accessorKey: 'actual_total_amount',
+      accessorKey: 'actualTotalAmount',
       header: 'Actual Amount',
     },
     {
-      accessorKey: 'invoices_count',
+      accessorKey: 'invoicesCount',
       header: 'Invoice Count',
     },
   ];

@@ -1,11 +1,15 @@
 class Api::V1::LineItemsController < ApplicationController
   def index
-    line_items = LineItem.includes(:campaign, :invoices).page(params[:page]).per(params[:per_page] || 10)
+    line_items = LineItem.includes(:campaign, :invoices)
+                        .page((params[:page_index].to_i || 0) + 1)
+                        .per(params[:page_size] || 10)
 
     render json: {
-      current_page: line_items.current_page,
-      total_pages: line_items.total_pages,
-      total_count: line_items.total_count,
+      pagination: {
+        current_page: line_items.current_page,
+        total_pages: line_items.total_pages,
+        total_count: line_items.total_count,
+      },
 
       data: line_items.map { |line_item|
         {

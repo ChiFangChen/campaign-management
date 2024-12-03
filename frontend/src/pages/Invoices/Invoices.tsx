@@ -5,7 +5,7 @@ import { usePagination } from '@/hooks';
 
 export const Invoices = () => {
   const paginationState = usePagination();
-  const { data, isLoading, isFetching } = useInvoices({ page: 1, per_page: 10 });
+  const { data, isLoading, isFetching } = useInvoices(paginationState.pagination);
   console.log(data);
   const columns: ColumnDef<Invoice>[] = [
     {
@@ -13,7 +13,7 @@ export const Invoices = () => {
       header: 'Campaign Name',
     },
     {
-      accessorKey: 'line_items',
+      accessorKey: 'lineItems',
       header: 'Line Items',
       cell: ({ getValue }) => {
         const value = getValue() as LineItem[];
@@ -21,7 +21,7 @@ export const Invoices = () => {
       },
     },
     {
-      accessorKey: 'total_amount',
+      accessorKey: 'totalAmount',
       header: 'Total Amount',
     },
   ];
