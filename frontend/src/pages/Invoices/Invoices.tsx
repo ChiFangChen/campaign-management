@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useInvoices } from '@/queries/invoices';
 import { Title, Table } from '@/components';
 import { usePagination } from '@/hooks';
+import { readableDate } from '@/lib/utils';
 
 export const Invoices = () => {
   const paginationState = usePagination();
@@ -9,22 +10,23 @@ export const Invoices = () => {
   console.log(data);
   const columns: ColumnDef<Invoice>[] = [
     {
-      accessorKey: 'campaign.name',
-      header: 'Campaign Name',
+      accessorKey: 'id',
+      header: 'ID',
     },
     {
-      accessorKey: 'lineItems',
-      header: 'Line Items',
-      cell: ({ getValue }) => {
-        const value = getValue() as LineItem[];
-        return value.map((v) => <div key={v.id}>{v.name}</div>);
-      },
+      accessorFn: ({ createdAt }) => readableDate(createdAt),
+      header: 'Created At',
+    },
+    {
+      accessorFn: ({ updatedAt }) => readableDate(updatedAt),
+      header: 'Last Updated At',
     },
     {
       accessorKey: 'totalAmount',
       header: 'Total Amount',
     },
   ];
+
   return (
     <div>
       <Title>Invoices</Title>

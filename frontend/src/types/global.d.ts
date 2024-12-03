@@ -78,9 +78,9 @@ declare global {
 
   type Invoice = {
     id: number;
+    createdAt: string;
+    updatedAt: string;
     totalAmount: number;
-    lineItems: BasicItem[];
-    campaign: BasicItem;
   };
 }
 

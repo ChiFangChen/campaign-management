@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_02_075948) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_03_144534) do
   create_table "campaigns", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -28,10 +28,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_02_075948) do
 
   create_table "invoices", force: :cascade do |t|
     t.decimal "adjustments"
-    t.integer "campaign_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["campaign_id"], name: "index_invoices_on_campaign_id"
   end
 
   create_table "line_items", force: :cascade do |t|
@@ -46,6 +44,5 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_02_075948) do
 
   add_foreign_key "invoice_line_items", "invoices"
   add_foreign_key "invoice_line_items", "line_items"
-  add_foreign_key "invoices", "campaigns"
   add_foreign_key "line_items", "campaigns"
 end
