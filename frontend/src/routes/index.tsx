@@ -18,9 +18,9 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: routes.dashboard, element: <Dashboard /> },
-      { path: routes.campaigns, element: <Campaigns /> },
-      { path: routes.inlineItems, element: <LineItems /> },
-      { path: routes.invoices, element: <Invoices /> },
+      { path: `${routes.campaigns}/*`, element: <Campaigns /> },
+      { path: `${routes.inlineItems}/*`, element: <LineItems /> },
+      { path: `${routes.invoices}/*`, element: <Invoices /> },
       {
         path: '*',
         element: <Navigate to="/" />,

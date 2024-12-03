@@ -34,7 +34,8 @@ export const LineItems = () => {
       <Title>Line Items</Title>
       <Table
         columns={columns}
-        data={data}
+        data={data?.data}
+        paginationData={data?.pagination}
         isFetching={isFetching}
         isLoading={isLoading}
         paginationState={paginationState}

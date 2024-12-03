@@ -39,15 +39,9 @@ class Api::V1::CampaignsController < ApplicationController
         {
           id: line_item.id,
           name: line_item.name,
-          booked_amount: line_item.booked_amount,
-          actual_amount: line_item.actual_amount
-        }
-      end,
-      invoices: campaign.line_items.flat_map(&:invoices).uniq.map do |invoice|
-        {
-          id: invoice.id,
-          adjustments: invoice.adjustments,
-          line_items: invoice.line_items
+          booked_amount: line_item.booked_amount.round(2),
+          actual_amount: line_item.actual_amount.round(2),
+          invoices: line_item.invoices
         }
       end
     }

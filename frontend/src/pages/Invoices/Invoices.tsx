@@ -30,7 +30,8 @@ export const Invoices = () => {
       <Title>Invoices</Title>
       <Table
         columns={columns}
-        data={data}
+        data={data?.data}
+        paginationData={data?.pagination}
         isFetching={isFetching}
         isLoading={isLoading}
         paginationState={paginationState}

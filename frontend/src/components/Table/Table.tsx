@@ -4,6 +4,7 @@ import {
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
+  Row,
 } from '@tanstack/react-table';
 import {
   Table as UITable,
@@ -20,38 +21,48 @@ import { Pagination } from './Pagination';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data?: {
-    pagination: {
-      currentPage: number;
-      totalPages: number;
-      totalCount: number;
-    };
-    data: TData[];
+  data?: TData[];
+  paginationData?: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
   };
   isLoading?: boolean;
   isFetching?: boolean;
   paginationState: UsePaginationReturn;
+  onRowClick?: (row: Row<TData>) => void;
+  manualPagination?: boolean;
+  goTopOnPaging?: boolean;
 }
 
 export const Table = <TData, TValue>({
   columns,
-  data,
+  data = [],
+  paginationData,
   isLoading = false,
   isFetching = false,
   paginationState,
+  onRowClick,
+  goTopOnPaging = true,
+  manualPagination = true,
 }: DataTableProps<TData, TValue>) => {
   const table = useReactTable({
-    data: data?.data || [],
+    data,
     columns,
-    pageCount: data?.pagination.totalPages || 0,
-    manualPagination: true,
     state: { pagination: paginationState.pagination },
     onPaginationChange: paginationState.setPagination,
-    getCoreRowModel: getCoreRowModel(),
+    ...(manualPagination
+      ? {
+          manualPagination: true,
+          pageCount: paginationData?.totalPages || 0,
+        }
+      : {
+          manualPagination: false,
+          pageCount: Math.ceil(data.length / paginationState.pagination.pageSize),
+        }),
     getPaginationRowModel: getPaginationRowModel(),
+    getCoreRowModel: getCoreRowModel(),
   });
-
-  console.log('table', table);
 
   return (
     <div className="container mx-auto my-4">
@@ -84,7 +95,12 @@ export const Table = <TData, TValue>({
               ))
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  onClick={() => onRowClick?.(row)}
+                  className={onRowClick ? 'cursor-pointer' : ''}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -112,6 +128,7 @@ export const Table = <TData, TValue>({
           nextPage={table.nextPage}
           goToPage={(pageIndex: number) => table.setPageIndex(pageIndex)}
           totalPages={table.getPageCount()}
+          goTopOnPaging={goTopOnPaging}
         />
       )}
     </div>
