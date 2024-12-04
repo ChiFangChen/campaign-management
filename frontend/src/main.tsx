@@ -5,7 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { QueryClientProvider } from '@/contexts/QueryClientProvider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
-import { router } from './routes';
+import { rootRouter } from './routes/routers';
 
 import './index.css';
 
@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider>
       <TooltipProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={rootRouter} />
       </TooltipProvider>
     </QueryClientProvider>
     <Toaster />

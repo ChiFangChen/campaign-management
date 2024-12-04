@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Calendar, Home, Inbox, Search, Plus } from 'lucide-react';
+import { ChartColumnIncreasing, TableProperties, Receipt, Plus } from 'lucide-react';
 import {
   Sidebar,
   SidebarHeader,
@@ -20,8 +20,8 @@ const routesItems = [
     items: [
       {
         title: 'Dashboard',
-        url: '/',
-        icon: Home,
+        url: routes.dashboard,
+        icon: ChartColumnIncreasing,
       },
     ],
   },
@@ -30,8 +30,8 @@ const routesItems = [
     items: [
       {
         title: 'Campaigns',
-        url: '/campaigns',
-        icon: Inbox,
+        url: routes.campaigns,
+        icon: TableProperties,
         action: (pushPage: ReturnType<typeof useNavigate>) => (
           <SidebarMenuAction onClick={() => pushPage('/campaigns?create=true')}>
             <Plus /> <span className="sr-only">Add Project</span>
@@ -39,14 +39,9 @@ const routesItems = [
         ),
       },
       {
-        title: 'Inline Items',
-        url: '/inline-items',
-        icon: Calendar,
-      },
-      {
         title: 'Invoices',
-        url: '/invoices',
-        icon: Search,
+        url: routes.invoices,
+        icon: Receipt,
       },
     ],
   },
