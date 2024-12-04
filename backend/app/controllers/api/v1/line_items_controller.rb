@@ -1,29 +1,22 @@
 class Api::V1::LineItemsController < ApplicationController
-  def index
-    line_items = LineItem.includes(:campaign, :invoices)
-                        .page((params[:page_index].to_i || 0) + 1)
-                        .per(params[:page_size] || 10)
+  def show
+    line_item = LineItem.includes(:invoices).find(params[:id])
 
     render json: {
-      pagination: {
-        current_page: line_items.current_page,
-        total_pages: line_items.total_pages,
-        total_count: line_items.total_count,
-      },
-
-      data: line_items.map { |line_item|
+      id: line_item.id,
+      name: line_item.name,
+      booked_amount: line_item.booked_amount.round(2),
+      actual_amount: line_item.actual_amount.round(2),
+      invoices: line_item.invoices.map do |invoice|
         {
-          id: line_item.id,
-          name: line_item.name,
-          booked_amount: line_item.booked_amount.round(2),
-          actual_amount: line_item.actual_amount.round(2),
-          campaign: {
-            id: line_item.campaign.id,
-            name: line_item.campaign.name
-          },
-          invoices_count: line_item.invoices.size
+          id: invoice.id,
+          adjustments: invoice.adjustments.round(2),
+          created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+          updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S')
         }
-      }
+      end
     }
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Line item not found' }, status: :not_found
   end
 end

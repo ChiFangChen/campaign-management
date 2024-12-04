@@ -1,8 +1,8 @@
 class Api::V1::CampaignsController < ApplicationController
   def index
-    campaigns = Campaign.includes(line_items: { invoices: :line_items })
-                        .page((params[:page_index].to_i || 0) + 1)
-                        .per(params[:page_size] || 10)
+    campaigns = Campaign.includes(:line_items)
+                        .page(params.fetch(:page_index, 0).to_i + 1)
+                        .per(params.fetch(:page_size, 10))
 
     render json: {
       pagination: {
@@ -10,27 +10,21 @@ class Api::V1::CampaignsController < ApplicationController
         total_pages: campaigns.total_pages,
         total_count: campaigns.total_count,
       },
-
-      data: campaigns.map { |campaign|
-        booked_total_amount = campaign.line_items.sum(&:booked_amount).round(2)
-        actual_total_amount = campaign.line_items.sum(&:actual_amount).round(2)
-        line_items_count = campaign.line_items.size
-        invoices_count = campaign.line_items.flat_map(&:invoices).uniq.size
-
+      data: campaigns.map do |campaign|
         {
           id: campaign.id,
           name: campaign.name,
-          booked_total_amount: booked_total_amount,
-          actual_total_amount: actual_total_amount,
-          line_items_count: line_items_count,
-          invoices_count: invoices_count
+          booked_total_amount: campaign.line_items.sum(:booked_amount).to_f.round(2),
+          actual_total_amount: campaign.line_items.sum(:actual_amount).to_f.round(2),
+          line_items_count: campaign.line_items.size,
+          invoices_count: campaign.line_items.joins(:invoices).distinct.count('invoices.id')
         }
-      }
+      end
     }
   end
 
   def show
-    campaign = Campaign.includes(line_items: { invoices: :line_items }).find(params[:id])
+    campaign = Campaign.includes(line_items: :invoices).find(params[:id])
 
     render json: {
       id: campaign.id,
@@ -39,13 +33,20 @@ class Api::V1::CampaignsController < ApplicationController
         {
           id: line_item.id,
           name: line_item.name,
-          booked_amount: line_item.booked_amount.round(2),
-          actual_amount: line_item.actual_amount.round(2),
-          invoices: line_item.invoices
+          booked_amount: line_item.booked_amount.to_f.round(2),
+          actual_amount: line_item.actual_amount.to_f.round(2),
+          invoices: line_item.invoices.map do |invoice|
+            {
+              id: invoice.id,
+              adjustments: invoice.adjustments.to_f.round(2),
+              created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+              updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            }
+          end
         }
       end
     }
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Campaign not found' }, status: :not_found
+    render json: { error: "Campaign with id #{params[:id]} not found" }, status: :not_found
   end
 end

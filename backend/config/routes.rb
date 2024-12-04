@@ -11,8 +11,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :campaigns, only: [:index, :show]
-      resources :line_items, only: [:index]
-      resources :invoices, only: [:index]
+      resources :line_items, only: [:show]
+      resources :invoices, only: [:index, :show]
     end
   end
   
