@@ -43,8 +43,8 @@ declare global {
   type Campaign = {
     id: number;
     name: string;
-    bookedAmount: string;
-    actualAmount: string;
+    bookedAmount: number;
+    actualAmount: number;
     invoicesCount: number;
     campaign: BasicItem;
   };
@@ -52,8 +52,8 @@ declare global {
   type CampaignDetailLineItem = {
     id: number;
     name: string;
-    actualAmount: string;
-    bookedAmount: string;
+    actualAmount: number;
+    bookedAmount: number;
     invoices?: {
       id: number;
       createdAt: string;
@@ -65,15 +65,6 @@ declare global {
     id: number;
     name: string;
     lineItems: CampaignDetailLineItem[];
-  };
-
-  type LineItem = {
-    id: number;
-    name: string;
-    actualAmount: string;
-    bookedAmount: string;
-    invoicesCount: number;
-    campaign: BasicItem;
   };
 
   type Invoice = {

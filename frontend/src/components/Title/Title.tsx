@@ -1,3 +1,3 @@
 export const Title = ({ children }: ComponentWithChildren) => (
-  <h1 className="text-lg">{children}</h1>
+  <h1 className="text-2xl">{children}</h1>
 );

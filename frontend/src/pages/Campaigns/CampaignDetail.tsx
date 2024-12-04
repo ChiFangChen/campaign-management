@@ -1,12 +1,19 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { CellContext } from '@tanstack/react-table';
 import { useCampaignDetail } from '@/queries/campaigns';
-import { Title, Table, Tooltip } from '@/components';
+import { Breadcrumb, Title, Table, Tooltip, TotalAmountChart } from '@/components';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePagination } from '@/hooks';
 import { routes } from '@/routes';
 import { readableDate } from '@/lib/utils';
+
+const breadcrumbList = [
+  {
+    name: 'Campaigns',
+    url: routes.campaigns,
+  },
+];
 
 export const CampaignDetail = () => {
   const { id } = useParams();
@@ -68,53 +75,13 @@ export const CampaignDetail = () => {
     },
   ];
 
-  // const invoiceColumns = [
-  //   {
-  //     accessorKey: 'name',
-  //     header: 'Name',
-  //   },
-  //   {
-  //     accessorKey: 'bookedAmount',
-  //     header: 'Booked Amount',
-  //   },
-  //   {
-  //     accessorKey: 'actualAmount',
-  //     header: 'Actual Amount',
-  //   },
-  //   {
-  //     header: 'Invoice',
-  //     columns: [
-  //       {
-  //         accessorKey: 'invoice.adjustments',
-  //         header: 'Adjustments',
-  //       },
-  //       {
-  //         accessorKey: 'invoice',
-  //         header: 'Total',
-  //         cell: ({ row, table, getValue }: CellContext<CampaignDetail, string>) => {
-  //           const invoice = getValue();
-  //           if (!invoice) return null;
-
-  //           const rowIndex = row.index;
-  //           const previousRow = table.getRowModel().rows[rowIndex - 1];
-  //           const shouldMerge = previousRow && previousRow.original.invoice?.id === invoice?.id;
-
-  //           return shouldMerge ? null : getValue();
-  //         },
-  //       },
-  //       {
-  //         accessorKey: 'id',
-  //         header: null,
-  //       },
-  //     ],
-  //   },
-  // ];
-
   return (
     <div>
+      <Breadcrumb isLoading={isLoading} list={breadcrumbList} />
       <Title>{data?.name || <Skeleton className="h-6" />}</Title>
+      <TotalAmountChart lineItems={data?.lineItems || []} />
       <div>
-        <h1 className="text-md mt-6">Line Items</h1>
+        <h1 className="text-lg mt-2">Line Items</h1>
         <Table
           columns={lineItemColumns}
           data={data?.lineItems || []}
@@ -122,7 +89,7 @@ export const CampaignDetail = () => {
           isLoading={isLoading}
           paginationState={paginationState}
           onRowClick={(row) => {
-            navigate(`${routes.inlineItems}/${row.original.id}`);
+            navigate(`${routes.lineItems}/${row.original.id}`);
           }}
           goTopOnPaging={false}
           manualPagination={false}

@@ -5,7 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { QueryClientProvider } from '@/contexts/QueryClientProvider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
-import { rootRouter } from './routes/routers';
+import { rootRouter } from '@/routes/routers';
 
 import './index.css';
 
