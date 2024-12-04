@@ -29,6 +29,8 @@ export const Pagination = ({
   totalPages,
   goTopOnPaging,
 }: PaginationProps) => {
+  if (totalPages <= 1) return null;
+
   const onClickWrapper =
     (onClickFunc?: (e: React.MouseEvent<HTMLAnchorElement>) => void) =>
     (e: React.MouseEvent<HTMLAnchorElement>) => {

@@ -2,31 +2,16 @@ import * as React from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart';
-
-export const description = 'An interactive bar chart';
-
-const chartConfig = {
-  actual: {
-    label: 'Actual',
-    color: 'hsl(var(--chart-1))',
-  },
-  booked: {
-    label: 'Booked',
-    color: 'hsl(var(--chart-6))',
-  },
-} satisfies ChartConfig;
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Skeleton } from '@/components/ui/skeleton';
+import { chartConfig } from '@/constants';
 
 type TotalAmountChartProps = {
+  isLoading?: boolean;
   lineItems?: CampaignDetailLineItem[];
 };
 
-export function TotalAmountChart({ lineItems = [] }: TotalAmountChartProps) {
+export function TabbedAmountComparisonChart({ isLoading, lineItems = [] }: TotalAmountChartProps) {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>('actual');
 
   const { total, chartData } = React.useMemo(
@@ -62,7 +47,11 @@ export function TotalAmountChart({ lineItems = [] }: TotalAmountChartProps) {
               >
                 <span className="text-xs text-muted-foreground">{chartConfig[chart].label}</span>
                 <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total[key as keyof typeof total].toLocaleString()}
+                  {isLoading ? (
+                    <Skeleton className="h-6 w-24" />
+                  ) : (
+                    total[key as keyof typeof total].toLocaleString()
+                  )}
                 </span>
               </button>
             );
@@ -80,7 +69,7 @@ export function TotalAmountChart({ lineItems = [] }: TotalAmountChartProps) {
             }}
           >
             <CartesianGrid vertical={false} />
-            <XAxis dataKey="id" tick={false} tickLine={false} axisLine={false} />
+            <XAxis dataKey="name" tick={false} tickLine={false} axisLine={false} />
             <ChartTooltip
               content={
                 <ChartTooltipContent

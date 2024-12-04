@@ -1,9 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { CellContext } from '@tanstack/react-table';
 import { useCampaignDetail } from '@/queries/campaigns';
-import { Breadcrumb, Title, Table, Tooltip, TotalAmountChart } from '@/components';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Breadcrumb,
+  Title,
+  Table,
+  Tooltip,
+  TabbedAmountComparisonChart,
+  Button,
+  Skeleton,
+} from '@/components';
 import { usePagination } from '@/hooks';
 import { routes } from '@/routes';
 import { readableDate } from '@/lib/utils';
@@ -79,9 +85,9 @@ export const CampaignDetail = () => {
     <div>
       <Breadcrumb isLoading={isLoading} list={breadcrumbList} />
       <Title>{data?.name || <Skeleton className="h-6" />}</Title>
-      <TotalAmountChart lineItems={data?.lineItems || []} />
+      <TabbedAmountComparisonChart isLoading={isLoading} lineItems={data?.lineItems || []} />
       <div>
-        <h1 className="text-lg mt-2">Line Items</h1>
+        <h2 className="text-lg mt-2">Line Items</h2>
         <Table
           columns={lineItemColumns}
           data={data?.lineItems || []}

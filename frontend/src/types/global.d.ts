@@ -67,6 +67,18 @@ declare global {
     lineItems: CampaignDetailLineItem[];
   };
 
+  type LineItemDetail = {
+    id: number;
+    name: string;
+    actualAmount: number;
+    bookedAmount: number;
+    invoices: {
+      id: number;
+      createdAt: string;
+      updatedAt: string;
+    }[];
+  };
+
   type Invoice = {
     id: number;
     createdAt: string;

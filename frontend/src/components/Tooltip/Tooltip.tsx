@@ -5,7 +5,9 @@ type TooltipProps = { content: ReactNode } & ComponentWithChildren;
 
 export const Tooltip = ({ children, content = null }: TooltipProps) => (
   <UITooltip>
-    <TooltipTrigger>{children}</TooltipTrigger>
+    <TooltipTrigger asChild>
+      <div>{children}</div>
+    </TooltipTrigger>
     <TooltipContent>{content}</TooltipContent>
   </UITooltip>
 );
