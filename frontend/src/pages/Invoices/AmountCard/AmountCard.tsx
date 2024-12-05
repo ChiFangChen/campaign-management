@@ -6,7 +6,7 @@ import { AmountPopover, AmountPopoverType } from './AmountPopover';
 
 type AmountCardProps = {
   type: 'actual' | 'adjustments' | 'final';
-  data: { totalActualAmount: number; adjustments: number };
+  data?: InvoiceDetail;
 };
 
 export const AmountCard = ({ type, data }: AmountCardProps) => {

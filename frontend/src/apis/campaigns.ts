@@ -9,11 +9,13 @@ const CampaignsAPI: ResourceApi = {
 };
 
 export const fetchCampaigns = async (paginationParams: PaginationParams) => {
-  const response = await axiosInstance.get(CampaignsAPI.list, { params: paginationParams });
+  const response = await axiosInstance.get<PagedData<Campaign[]>>(CampaignsAPI.list, {
+    params: paginationParams,
+  });
   return response.data;
 };
 
 export const fetchCampaignDetail = async (id: string) => {
-  const response = await axiosInstance.get(CampaignsAPI.detail(id));
+  const response = await axiosInstance.get<CampaignDetail>(CampaignsAPI.detail(id));
   return response.data;
 };

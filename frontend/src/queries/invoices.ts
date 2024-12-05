@@ -1,5 +1,6 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { fetchInvoices, fetchInvoiceDetail } from './api';
+
+import { fetchInvoices, fetchInvoiceDetail } from '@/apis';
 import { getAllKeys, getDetailKeys } from './utils';
 
 export const moduleName = 'invoices';

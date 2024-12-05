@@ -8,6 +8,6 @@ const LineItemsAPI: Omit<ResourceApi, 'list'> = {
 };
 
 export const fetchLineItemDetail = async (id: string) => {
-  const response = await axiosInstance.get(LineItemsAPI.detail(id));
+  const response = await axiosInstance.get<LineItemDetail>(LineItemsAPI.detail(id));
   return response.data;
 };

@@ -18,11 +18,22 @@ declare global {
     pageSize: number;
   };
 
+  type PaginationData = {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+  };
+
   type ApiResponse<T> = {
     data: T;
     status: number;
     statusText: string;
     headers: Record<string, string>;
+  };
+
+  type PagedData<T> = {
+    pagination: PaginationData;
+    data: T;
   };
 
   type PathFn = (data: string) => string;
@@ -101,7 +112,8 @@ declare global {
     id: number;
     createdAt: string;
     updatedAt: string;
-    total_actual_amount: number;
+    adjustments: number;
+    totalActualAmount: number;
     campaigns: InvoiceDetailCampaign[];
   };
 }

@@ -1,5 +1,6 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { fetchCampaigns, fetchCampaignDetail } from './api';
+
+import { fetchCampaigns, fetchCampaignDetail } from '@/apis';
 import { getAllKeys, getDetailKeys } from './utils';
 
 const moduleName = 'campaigns';

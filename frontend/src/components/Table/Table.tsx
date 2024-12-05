@@ -22,11 +22,7 @@ import { Pagination } from './Pagination';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data?: TData[];
-  paginationData?: {
-    currentPage: number;
-    totalPages: number;
-    totalCount: number;
-  };
+  paginationData?: PaginationData;
   isLoading?: boolean;
   isFetching?: boolean;
   paginationState?: UsePaginationReturn;

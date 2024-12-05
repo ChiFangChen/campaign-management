@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit } from 'lucide-react';
 
 import { useForm, useToast } from '@/hooks';
-import { updateInvoice } from '@/queries/api';
+import { updateInvoice } from '@/apis';
 import { moduleName } from '@/queries/invoices';
 import { Popover, PopoverContent, PopoverTrigger, Input, Button } from '@/components';
 

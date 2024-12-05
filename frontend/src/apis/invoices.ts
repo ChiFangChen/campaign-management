@@ -9,12 +9,14 @@ const InvoicesAPI: ResourceApi = {
 };
 
 export const fetchInvoices = async (paginationParams: PaginationParams) => {
-  const response = await axiosInstance.get(InvoicesAPI.list, { params: paginationParams });
+  const response = await axiosInstance.get<PagedData<Invoice[]>>(InvoicesAPI.list, {
+    params: paginationParams,
+  });
   return response.data;
 };
 
 export const fetchInvoiceDetail = async (id: string) => {
-  const response = await axiosInstance.get(InvoicesAPI.detail(id));
+  const response = await axiosInstance.get<InvoiceDetail>(InvoicesAPI.detail(id));
   return response.data;
 };
 

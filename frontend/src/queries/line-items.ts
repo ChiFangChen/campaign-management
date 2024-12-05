@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchLineItemDetail } from './api';
+
+import { fetchLineItemDetail } from '@/apis';
 import { getDetailKeys } from './utils';
 
 const moduleName = 'line-items';
