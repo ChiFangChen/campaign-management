@@ -45,9 +45,7 @@ export const AmountCard = ({ type, data }: AmountCardProps) => {
           )}
         </>
       ) : (
-        <div className="text-3xl">
-          <Skeleton className="h-6" />
-        </div>
+        <Skeleton className="h-8 mt-0.5 w-36" />
       )}
     </Card>
   );

@@ -48,15 +48,13 @@ const columns: ColumnDef<InvoiceDetailCampaignLineItem>[] = [
 
 type CampaignCardProps = {
   campaign: InvoiceDetailCampaign;
-  isFetching: boolean;
-  isLoading: boolean;
 };
 
-export const CampaignCard = ({ campaign, isFetching, isLoading }: CampaignCardProps) => {
+export const CampaignCard = ({ campaign }: CampaignCardProps) => {
   const navigate = useNavigate();
 
   return (
-    <Card key={campaign.id}>
+    <Card>
       <CardHeader className="pb-4">
         <CardDescription className="flex justify-between mb-1">
           <span>Campaign</span>
@@ -72,8 +70,6 @@ export const CampaignCard = ({ campaign, isFetching, isLoading }: CampaignCardPr
         <Table
           columns={columns}
           data={campaign.lineItems}
-          isFetching={isFetching}
-          isLoading={isLoading}
           onRowClick={(row) => {
             navigate(`${routes.lineItems}/${row.original.id}`);
           }}

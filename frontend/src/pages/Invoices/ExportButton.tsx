@@ -11,12 +11,10 @@ import {
 } from '@/components';
 
 type ExportButtonProps = {
-  data?: InvoiceDetail;
+  data: InvoiceDetail;
 };
 
 export const ExportButton = ({ data }: ExportButtonProps) => {
-  if (!data) return null;
-
   const onDownloadClick = () => {
     const flattenedTable = flattenDataToTable(data);
     exportToCSV(data.id, flattenedTable);

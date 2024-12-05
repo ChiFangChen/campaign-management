@@ -8,7 +8,7 @@ import { readableTime } from '@/lib/formatter-utils';
 import { useInvoiceDetail } from '@/queries/invoices';
 import { Breadcrumb, Title, Skeleton } from '@/components';
 import { AmountCard } from './AmountCard';
-import { CampaignCard } from './CampaignCard';
+import { CampaignCard, SkeletonCampaignCard } from './CampaignCard';
 import { ExportButton } from './ExportButton';
 
 const ScrollArea = styled.div`
@@ -26,7 +26,7 @@ const breadcrumbList = [
 export const InvoiceDetail = () => {
   const { id } = useParams();
   const listRef = useRef<HTMLDivElement | null>(null);
-  const { data, isLoading, isFetching } = useInvoiceDetail(id as string);
+  const { data } = useInvoiceDetail(id as string);
 
   const rowVirtualizer = useVirtualizer({
     count: data?.campaigns.length || 0,
@@ -39,19 +39,26 @@ export const InvoiceDetail = () => {
     <div className="flex flex-col pt-4" style={{ height: `calc(100vh - 1rem)` }}>
       <Breadcrumb list={breadcrumbList} />
       <div className="flex justify-between">
-        <Title>
-          {data?.id || <Skeleton className="h-6 w-32" />}
-          <ExportButton data={data} />
-        </Title>
-        {data && (
-          <div className="text-xs text-gray-500 text-right">
-            <div>Created: {readableTime(data.createdAt)}</div>
-            <div>Last Updated: {readableTime(data.updatedAt)}</div>
-          </div>
+        {data ? (
+          <>
+            <Title>
+              {data.id}
+              <ExportButton data={data} />
+            </Title>
+            <div className="text-xs text-gray-500 text-right">
+              <div>Created: {readableTime(data.createdAt)}</div>
+              <div>Last Updated: {readableTime(data.updatedAt)}</div>
+            </div>
+          </>
+        ) : (
+          <>
+            <Skeleton className="h-9 w-32" />
+            <Skeleton className="h-9 w-48" />
+          </>
         )}
       </div>
 
-      <div className="my-4 flex justify-center gap-2 items-center">
+      <div className="mt-4 mb-6 flex justify-center gap-2 items-center">
         <AmountCard type="actual" data={data} />
         <div>+</div>
         <AmountCard type="adjustments" data={data} />
@@ -67,13 +74,8 @@ export const InvoiceDetail = () => {
           }}
         >
           {data?.campaigns.map((campaign) => (
-            <CampaignCard
-              key={campaign.id}
-              campaign={campaign}
-              isFetching={isFetching}
-              isLoading={isLoading}
-            />
-          ))}
+            <CampaignCard key={campaign.id} campaign={campaign} />
+          )) || <SkeletonCampaignCard />}
         </div>
       </ScrollArea>
     </div>
