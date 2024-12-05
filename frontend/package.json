@@ -21,6 +21,7 @@
     "@shadcn/ui": "^0.0.4",
     "@tanstack/react-query": "^5.62.0",
     "@tanstack/react-table": "^8.20.5",
+    "@tanstack/react-virtual": "^3.10.9",
     "axios": "^1.7.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
