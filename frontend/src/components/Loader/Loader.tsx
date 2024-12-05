@@ -1,3 +1,4 @@
+import { HTMLAttributes } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const spin = keyframes`
@@ -30,8 +31,8 @@ const LoaderIcon = styled.div`
   animation: ${spin} 1s linear infinite;
 `;
 
-export const Loader = () => (
-  <StyledLoader>
+export const Loader = (props: HTMLAttributes<HTMLDivElement>) => (
+  <StyledLoader {...props}>
     <LoaderIcon />
   </StyledLoader>
 );

@@ -6,10 +6,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { formatAmount } from '@/lib/formatter-utils';
 import { useForm, useToast } from '@/hooks';
 import { updateInvoice } from '@/apis';
 import { moduleName } from '@/queries/invoices';
-import { Popover, PopoverContent, PopoverTrigger, Input, Button } from '@/components';
+import { Popover, PopoverContent, PopoverTrigger, Input, Button, Loader } from '@/components';
 
 const schema = object().shape({
   amount: number().typeError('Please input number').nullable().required('The field is required'),
@@ -78,11 +79,12 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
           <Edit className="w-12 h-12 text-white" />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent className="w-80 relative">
+        {isPending && <Loader className="inset-0" />}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-between text-sm text-gray-700 mb-2">
             <span>Update {name}</span>
-            <Button type="submit" size="sm" className="h-6">
+            <Button type="submit" size="sm" className="h-6" disabled={isPending}>
               Submit
             </Button>
           </div>
@@ -93,7 +95,7 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
               <Input
                 {...field}
                 type="number"
-                placeholder={String(amount)}
+                placeholder={formatAmount(amount)}
                 value={field.value ?? ''}
                 step={0.01}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
