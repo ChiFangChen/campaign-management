@@ -8,41 +8,63 @@ class Api::V1::InvoicesController < ApplicationController
       pagination: {
         current_page: invoices.current_page,
         total_pages: invoices.total_pages,
-        total_count: invoices.total_count,
+        total_count: invoices.total_count
       },
-      data: invoices.map { |invoice|
-        total_amount = invoice.line_items.sum(:actual_amount).to_f + invoice.adjustments.to_f
-
-        {
-          id: invoice.id,
-          created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-          updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
-          total_amount: total_amount.round(2)
-        }
-      }
+      data: invoices.map { |invoice| format_invoice_summary(invoice) }
     }
   end
 
   def show
-    invoice = Invoice.includes(:line_items).find(params[:id])
+    invoice = Invoice.includes(line_items: :campaign).find(params[:id])
+
+    render json: format_invoice_detail(invoice)
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Invoice not found' }, status: :not_found
+  end
+
+  private
+
+  def format_invoice_summary(invoice)
     total_amount = invoice.line_items.sum(:actual_amount).to_f + invoice.adjustments.to_f
 
-    render json: {
+    {
       id: invoice.id,
-      adjustments: invoice.adjustments.round(2),
-      line_items: invoice.line_items.map do |line_item|
-        {
-          id: line_item.id,
-          name: line_item.name,
-          actual_amount: line_item.actual_amount.round(2),
-          booked_amount: line_item.booked_amount.round(2)
-        }
-      end,
       created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
       updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
       total_amount: total_amount.round(2)
     }
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Invoice not found' }, status: :not_found
+  end
+
+  def format_invoice_detail(invoice)
+    total_actual_amount = invoice.line_items.sum(:actual_amount).to_f
+
+    {
+      id: invoice.id,
+      adjustments: invoice.adjustments.to_f.round(2),
+      campaigns: invoice.line_items.map(&:campaign).uniq.map { |campaign| format_campaign_data(campaign, invoice.id) },
+      total_actual_amount: total_actual_amount.round(2),
+      created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+      updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+    }
+  end
+
+  def format_campaign_data(campaign, invoice_id)
+    filtered_line_items = campaign.line_items.joins(:invoice_line_items)
+                                             .where(invoice_line_items: { invoice_id: invoice_id })
+
+    {
+      id: campaign.id,
+      name: campaign.name,
+      total_amount: filtered_line_items.sum(:actual_amount).to_f.round(2),
+      line_items: filtered_line_items.map { |line_item| format_line_item_data(line_item) }
+    }
+  end
+
+  def format_line_item_data(line_item)
+    {
+      id: line_item.id,
+      name: line_item.name,
+      actual_amount: line_item.actual_amount.to_f.round(2)
+    }
   end
 end

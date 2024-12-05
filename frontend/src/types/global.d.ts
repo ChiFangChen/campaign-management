@@ -85,6 +85,25 @@ declare global {
     updatedAt: string;
     totalAmount: number;
   };
+
+  type InvoiceDetailCampaignLineItem = {
+    id: number;
+    name: string;
+    actualAmount: number;
+  };
+
+  type InvoiceDetailCampaign = BasicItem & {
+    totalAmount: number;
+    lineItems: InvoiceDetailCampaignLineItem[];
+  };
+
+  type InvoiceDetail = {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    total_actual_amount: number;
+    campaigns: InvoiceDetailCampaign[];
+  };
 }
 
 export {};

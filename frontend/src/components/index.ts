@@ -7,3 +7,4 @@ export * from './Breadcrumb';
 export * from './charts';
 export * from './ui/button';
 export * from './ui/skeleton';
+export * from './ui/card';

@@ -1,10 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { useNavigate } from 'react-router-dom';
 import { useInvoices } from '@/queries/invoices';
 import { Title, Table } from '@/components';
 import { usePagination } from '@/hooks';
 import { readableDate } from '@/lib/utils';
+import { routes } from '@/routes';
 
-export const Invoices = () => {
+export const InvoiceList = () => {
+  const navigate = useNavigate();
   const paginationState = usePagination();
   const { data, isLoading, isFetching } = useInvoices(paginationState.pagination);
   console.log(data);
@@ -37,6 +40,9 @@ export const Invoices = () => {
         isFetching={isFetching}
         isLoading={isLoading}
         paginationState={paginationState}
+        onRowClick={(row) => {
+          navigate(`${routes.invoices}/${row.original.id}`);
+        }}
       />
     </div>
   );

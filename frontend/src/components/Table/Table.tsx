@@ -29,10 +29,11 @@ interface DataTableProps<TData, TValue> {
   };
   isLoading?: boolean;
   isFetching?: boolean;
-  paginationState: UsePaginationReturn;
+  paginationState?: UsePaginationReturn;
   onRowClick?: (row: Row<TData>) => void;
   manualPagination?: boolean;
   goTopOnPaging?: boolean;
+  isBordered?: boolean;
 }
 
 export const Table = <TData, TValue>({
@@ -45,12 +46,11 @@ export const Table = <TData, TValue>({
   onRowClick,
   goTopOnPaging = true,
   manualPagination = true,
+  isBordered = true,
 }: DataTableProps<TData, TValue>) => {
-  const table = useReactTable({
-    data,
-    columns,
-    state: { pagination: paginationState.pagination },
-    onPaginationChange: paginationState.setPagination,
+  const getPaginationConfig = () => ({
+    state: { pagination: paginationState!.pagination },
+    onPaginationChange: paginationState!.setPagination,
     ...(manualPagination
       ? {
           manualPagination: true,
@@ -58,15 +58,21 @@ export const Table = <TData, TValue>({
         }
       : {
           manualPagination: false,
-          pageCount: Math.ceil(data.length / paginationState.pagination.pageSize),
+          pageCount: Math.ceil(data.length / paginationState!.pagination.pageSize),
         }),
     getPaginationRowModel: getPaginationRowModel(),
+  });
+
+  const table = useReactTable({
+    data,
+    columns,
+    ...(paginationState ? getPaginationConfig() : {}),
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <div className="container mx-auto my-4">
-      <div className="rounded-md border relative">
+      <div className={`rounded-md relative${isBordered ? ' border' : ''}`}>
         {!isLoading && isFetching && <Loader />}
         <UITable>
           <TableHeader>

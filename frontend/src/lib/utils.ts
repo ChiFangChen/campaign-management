@@ -34,6 +34,7 @@ export const readableDate = (dateString: string, locale: string = 'en') => {
   const date = new Date(dateString);
   const formatter = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
+    timeStyle: 'short',
   });
   return formatter.format(date);
 };
