@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { formatAmount } from '@/lib/formatter-utils';
+import { cn } from '@/lib/utils';
 import { Skeleton, Card } from '@/components';
 import { AmountPopover, AmountPopoverType } from './AmountPopover';
 
@@ -31,7 +32,7 @@ export const AmountCard = ({ type, data }: AmountCardProps) => {
       <div className="pb-0 text-sm text-gray-700">{name}</div>
       {typeof amount === 'number' ? (
         <>
-          <div className={`text-3xl${type !== 'final' ? ' text-gray-900' : ''}`}>
+          <div className={cn('text-3xl', type !== 'final' ? 'text-gray-900' : '')}>
             {formatAmount(amount)}
           </div>
           {isEditable && (

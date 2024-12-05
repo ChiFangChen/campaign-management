@@ -5,6 +5,7 @@ import { InferType, object, number } from 'yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { useForm, useToast } from '@/hooks';
 import { updateInvoice } from '@/apis';
 import { moduleName } from '@/queries/invoices';
@@ -69,9 +70,10 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
     <Popover open={editPopoverOpen} onOpenChange={handleClick}>
       <PopoverTrigger asChild>
         <div
-          className={`absolute inset-0 w-full h-full rounded-xl bg-gray-300 bg-opacity-50 flex items-center justify-center group-hover:opacity-100 group-hover:cursor-pointer transition-opacity${
-            editPopoverOpen ? '' : ' opacity-0'
-          }`}
+          className={cn(
+            'absolute inset-0 w-full h-full rounded-xl bg-gray-300 bg-opacity-50 flex items-center justify-center group-hover:opacity-100 group-hover:cursor-pointer transition-opacity',
+            editPopoverOpen ? '' : 'opacity-0'
+          )}
         >
           <Edit className="w-12 h-12 text-white" />
         </div>
@@ -100,11 +102,12 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
                     field.onChange(inputValue);
                   }
                 }}
-                className={`block w-full border ${
+                className={cn(
+                  'block w-full border',
                   errors.amount
                     ? 'border-red-500 focus-visible:ring-red-500 focus:border-red-500'
                     : ''
-                }`}
+                )}
               />
             )}
           />
