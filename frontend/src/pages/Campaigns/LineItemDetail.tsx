@@ -2,31 +2,31 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
-import { readableTime } from '@/lib/utils';
+import { readableTime } from '@/lib/formatter-utils';
 import { usePagination } from '@/hooks';
 import { useLineItemDetail } from '@/queries/line-items';
 import { Breadcrumb, Title, Table, SingleAmountComparisonChart, Skeleton } from '@/components';
+
+const invoiceColumns: ColumnDef<Omit<Invoice, 'totalAmount'>>[] = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+  },
+  {
+    accessorFn: ({ createdAt }) => readableTime(createdAt),
+    header: 'Created At',
+  },
+  {
+    accessorFn: ({ updatedAt }) => readableTime(updatedAt),
+    header: 'Last Updated At',
+  },
+];
 
 export const LineItemDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useLineItemDetail(id as string);
   const paginationState = usePagination();
-
-  const invoiceColumns: ColumnDef<Invoice>[] = [
-    {
-      accessorKey: 'id',
-      header: 'ID',
-    },
-    {
-      accessorFn: ({ createdAt }) => readableTime(createdAt),
-      header: 'Created At',
-    },
-    {
-      accessorFn: ({ updatedAt }) => readableTime(updatedAt),
-      header: 'Last Updated At',
-    },
-  ];
 
   const breadcrumbList = [
     {

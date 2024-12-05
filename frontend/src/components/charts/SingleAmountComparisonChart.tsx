@@ -1,5 +1,5 @@
 import { XAxis, Cell, Bar, BarChart as UIBarChart } from 'recharts';
-import { formatAmount } from '@/lib/utils';
+import { formatAmount } from '@/lib/formatter-utils';
 import { ChartContainer } from '@/components/ui/chart';
 import { chartConfig } from '@/constants';
 

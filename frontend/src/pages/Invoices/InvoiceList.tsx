@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/routes';
-import { readableTime, formatAmount } from '@/lib/utils';
+import { readableTime, formatAmount } from '@/lib/formatter-utils';
 import { usePagination } from '@/hooks';
 import { useInvoices } from '@/queries/invoices';
 import { Title, Table } from '@/components';

@@ -10,3 +10,4 @@ export * from './ui/skeleton';
 export * from './ui/card';
 export * from './ui/popover';
 export * from './ui/input';
+export * from './ui/dropdown-menu';

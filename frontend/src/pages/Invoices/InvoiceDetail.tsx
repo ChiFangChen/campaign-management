@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { routes } from '@/routes';
-import { readableTime } from '@/lib/utils';
+import { readableTime } from '@/lib/formatter-utils';
 import { useInvoiceDetail } from '@/queries/invoices';
 import { Breadcrumb, Title, Skeleton } from '@/components';
 import { AmountCard } from './AmountCard';
 import { CampaignCard } from './CampaignCard';
+import { ExportButton } from './ExportButton';
 
 const breadcrumbList = [
   {
@@ -21,7 +22,10 @@ export const InvoiceDetail = () => {
     <div>
       <Breadcrumb list={breadcrumbList} />
       <div className="flex justify-between">
-        <Title>{data?.id || <Skeleton className="h-6 w-32" />}</Title>
+        <Title>
+          {data?.id || <Skeleton className="h-6 w-32" />}
+          <ExportButton data={data} />
+        </Title>
         {data && (
           <div className="text-xs text-gray-500 text-right">
             <div>Created: {readableTime(data.createdAt)}</div>

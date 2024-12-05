@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/routes';
-import { formatAmount } from '@/lib/utils';
+import { formatAmount } from '@/lib/formatter-utils';
 import { useCampaigns } from '@/queries/campaigns';
 import { usePagination } from '@/hooks';
 import { Title, Table } from '@/components';

@@ -83,6 +83,7 @@ declare global {
     name: string;
     actualAmount: number;
     bookedAmount: number;
+    campaign: BasicItem;
     invoices: {
       id: number;
       createdAt: string;

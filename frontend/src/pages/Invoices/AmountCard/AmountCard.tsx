@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { formatAmount } from '@/lib/utils';
+import { formatAmount } from '@/lib/formatter-utils';
 import { Skeleton, Card } from '@/components';
 import { AmountPopover, AmountPopoverType } from './AmountPopover';
 

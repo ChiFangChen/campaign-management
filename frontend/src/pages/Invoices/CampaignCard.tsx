@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { styled } from 'styled-components';
 
 import { routes } from '@/routes';
-import { formatAmount } from '@/lib/utils';
+import { formatAmount } from '@/lib/formatter-utils';
 import {
   Card,
   CardHeader,
