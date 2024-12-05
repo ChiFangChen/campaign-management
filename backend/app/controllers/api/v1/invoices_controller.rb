@@ -22,6 +22,25 @@ class Api::V1::InvoicesController < ApplicationController
     render json: { error: 'Invoice not found' }, status: :not_found
   end
 
+  def update
+    invoice = Invoice.find(params[:id])
+
+    if invoice.update(adjustments: params[:adjustments])
+      render json: {
+        message: 'Invoice updated successfully',
+        invoice: {
+          id: invoice.id,
+          adjustments: invoice.adjustments.to_f.round(2),
+          updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+      }, status: :ok
+    else
+      render json: { errors: invoice.errors.full_messages }, status: :unprocessable_entity
+    end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Invoice not found' }, status: :not_found
+  end
+
   private
 
   def format_invoice_summary(invoice)

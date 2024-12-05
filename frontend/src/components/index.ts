@@ -8,3 +8,5 @@ export * from './charts';
 export * from './ui/button';
 export * from './ui/skeleton';
 export * from './ui/card';
+export * from './ui/popover';
+export * from './ui/input';

@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :campaigns, only: [:index, :show]
       resources :line_items, only: [:show]
-      resources :invoices, only: [:index, :show]
+      resources :invoices, only: [:index, :show, :update]
     end
   end
   

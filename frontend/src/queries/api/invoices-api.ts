@@ -17,3 +17,15 @@ export const fetchInvoiceDetail = async (id: string) => {
   const response = await axiosInstance.get(InvoicesAPI.detail(id));
   return response.data;
 };
+
+type UpdateInvoiceParam = {
+  id: string;
+  data: {
+    adjustments: number;
+  };
+};
+
+export const updateInvoice = async ({ id, data }: UpdateInvoiceParam) => {
+  const response = await axiosInstance.patch(InvoicesAPI.update(id), data);
+  return response.data;
+};

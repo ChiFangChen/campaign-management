@@ -18,6 +18,7 @@ const getErrorHandler = (toast: ReturnType<typeof useToast>['toast']) => (error:
     console.error('Unknown Error:', error);
   }
   toast({
+    variant: 'destructive',
     title,
     description,
   });

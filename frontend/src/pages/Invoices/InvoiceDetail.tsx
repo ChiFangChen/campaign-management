@@ -16,7 +16,6 @@ const breadcrumbList = [
 export const InvoiceDetail = () => {
   const { id } = useParams();
   const { data, isLoading, isFetching } = useInvoiceDetail(id as string);
-  const totalAmount = data ? data.totalActualAmount + data.adjustments : 0;
   console.log('data', data);
 
   return (
@@ -33,11 +32,11 @@ export const InvoiceDetail = () => {
       </div>
 
       <div className="my-4 flex justify-center gap-2 items-center">
-        <AmountCard name="Actual Total" amount={data?.totalActualAmount} />
+        <AmountCard type="actual" data={data} />
         <div>+</div>
-        <AmountCard name="Adjustments" amount={data?.adjustments} />
+        <AmountCard type="adjustments" data={data} />
         <div>=</div>
-        <AmountCard name="Final Total Amount" amount={data && totalAmount} />
+        <AmountCard type="final" data={data} />
       </div>
 
       <div>
