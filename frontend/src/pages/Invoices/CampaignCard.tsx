@@ -3,16 +3,16 @@ import { ColumnDef } from '@tanstack/react-table';
 import { styled } from 'styled-components';
 
 import { routes } from '@/routes';
-import { formatAmount } from '@/lib/formatter-utils';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
   Table,
+  AmountTableCell,
 } from '@/components';
+import { TableRow, TableCell } from '@/components/ui/table';
 
 const StyledCardContent = styled(CardContent)`
   > div {
@@ -38,8 +38,11 @@ const columns: ColumnDef<InvoiceDetailCampaignLineItem>[] = [
     header: 'Name',
   },
   {
-    accessorFn: ({ actualAmount }) => formatAmount(actualAmount),
+    accessorKey: 'actualAmount',
     header: 'Amount',
+    meta: {
+      type: 'currency',
+    },
   },
 ];
 
@@ -65,7 +68,7 @@ export const CampaignCard = ({ campaign, isFetching, isLoading }: CampaignCardPr
           </Link>
         </CardTitle>
       </CardHeader>
-      <StyledCardContent className="border-y p-0">
+      <StyledCardContent className="border-y p-0 pb-4">
         <Table
           columns={columns}
           data={campaign.lineItems}
@@ -75,12 +78,16 @@ export const CampaignCard = ({ campaign, isFetching, isLoading }: CampaignCardPr
             navigate(`${routes.lineItems}/${row.original.id}`);
           }}
           isBordered={false}
+          footer={
+            <TableRow>
+              <TableCell colSpan={2} className="bg-white">
+                Total
+              </TableCell>
+              <AmountTableCell amount={campaign.totalAmount} className="bg-white" />
+            </TableRow>
+          }
         />
       </StyledCardContent>
-      <CardFooter className="justify-end pt-4">
-        <span className="mr-2 text-gray-700 text-sm">Total</span>{' '}
-        <span className="text-lg text-black">{formatAmount(campaign.totalAmount)}</span>
-      </CardFooter>
     </Card>
   );
 };

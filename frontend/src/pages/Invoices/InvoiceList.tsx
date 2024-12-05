@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/routes';
-import { readableTime, formatAmount } from '@/lib/formatter-utils';
+import { readableTime } from '@/lib/formatter-utils';
 import { usePagination } from '@/hooks';
 import { useInvoices } from '@/queries/invoices';
 import { Title, Table } from '@/components';
@@ -21,8 +21,11 @@ const columns: ColumnDef<Invoice>[] = [
     header: 'Last Updated At',
   },
   {
-    accessorFn: ({ totalAmount }) => formatAmount(totalAmount),
+    accessorKey: 'totalAmount',
     header: 'Total Amount',
+    meta: {
+      type: 'currency',
+    },
   },
 ];
 

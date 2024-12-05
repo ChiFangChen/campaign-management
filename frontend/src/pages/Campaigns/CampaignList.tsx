@@ -2,7 +2,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/routes';
-import { formatAmount } from '@/lib/formatter-utils';
 import { useCampaigns } from '@/queries/campaigns';
 import { usePagination } from '@/hooks';
 import { Title, Table } from '@/components';
@@ -17,16 +16,25 @@ const columns: ColumnDef<Campaign>[] = [
     header: 'Line Item Count',
   },
   {
-    accessorFn: ({ bookedTotalAmount }) => formatAmount(bookedTotalAmount),
+    accessorKey: 'bookedTotalAmount',
     header: 'Booked Amount',
+    meta: {
+      type: 'currency',
+    },
   },
   {
-    accessorFn: ({ actualTotalAmount }) => formatAmount(actualTotalAmount),
+    accessorKey: 'actualTotalAmount',
     header: 'Actual Amount',
+    meta: {
+      type: 'currency',
+    },
   },
   {
     accessorKey: 'invoicesCount',
     header: 'Invoice Count',
+    meta: {
+      className: 'text-right',
+    },
   },
 ];
 
