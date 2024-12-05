@@ -1,38 +1,40 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
-import { useCampaigns } from '@/queries/campaigns';
-import { Title, Table } from '@/components';
-import { usePagination } from '@/hooks';
+
 import { routes } from '@/routes';
+import { formatAmount } from '@/lib/utils';
+import { useCampaigns } from '@/queries/campaigns';
+import { usePagination } from '@/hooks';
+import { Title, Table } from '@/components';
+
+const columns: ColumnDef<Campaign>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+  },
+  {
+    accessorKey: 'lineItemsCount',
+    header: 'Line Item Count',
+  },
+  {
+    accessorFn: ({ bookedTotalAmount }) => formatAmount(bookedTotalAmount),
+    header: 'Booked Amount',
+  },
+  {
+    accessorFn: ({ actualTotalAmount }) => formatAmount(actualTotalAmount),
+    header: 'Actual Amount',
+  },
+  {
+    accessorKey: 'invoicesCount',
+    header: 'Invoice Count',
+  },
+];
 
 export const CampaignList = () => {
   const navigate = useNavigate();
   const paginationState = usePagination();
   const { data, isLoading, isFetching } = useCampaigns(paginationState.pagination);
 
-  console.log(data);
-  const columns: ColumnDef<Campaign>[] = [
-    {
-      accessorKey: 'name',
-      header: 'Name',
-    },
-    {
-      accessorKey: 'lineItemsCount',
-      header: 'Line Item Count',
-    },
-    {
-      accessorKey: 'bookedTotalAmount',
-      header: 'Booked Amount',
-    },
-    {
-      accessorKey: 'actualTotalAmount',
-      header: 'Actual Amount',
-    },
-    {
-      accessorKey: 'invoicesCount',
-      header: 'Invoice Count',
-    },
-  ];
   return (
     <div>
       <Title>Campaigns</Title>

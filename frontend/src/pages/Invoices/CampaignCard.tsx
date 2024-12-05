@@ -1,6 +1,8 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { styled } from 'styled-components';
+
+import { routes } from '@/routes';
 import { formatAmount } from '@/lib/utils';
 import {
   Card,
@@ -11,7 +13,6 @@ import {
   CardFooter,
   Table,
 } from '@/components';
-import { routes } from '@/routes';
 
 const StyledCardContent = styled(CardContent)`
   > div {

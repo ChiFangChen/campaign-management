@@ -30,7 +30,7 @@ export const decamelizeKeys = <T>(obj: T): T => {
   return obj;
 };
 
-export const readableDate = (dateString: string, locale: string = 'en') => {
+export const readableDate = (dateString: string, locale: string = 'en-US') => {
   const date = new Date(dateString);
   const formatter = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',

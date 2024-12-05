@@ -1,18 +1,17 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
-import { useLineItemDetail } from '@/queries/line-items';
-import { Breadcrumb, Title, Table, SingleAmountComparisonChart, Skeleton } from '@/components';
-import { usePagination } from '@/hooks';
+
 import { routes } from '@/routes';
 import { readableDate } from '@/lib/utils';
+import { usePagination } from '@/hooks';
+import { useLineItemDetail } from '@/queries/line-items';
+import { Breadcrumb, Title, Table, SingleAmountComparisonChart, Skeleton } from '@/components';
 
 export const LineItemDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useLineItemDetail(id as string);
   const paginationState = usePagination();
-
-  console.log('data', data);
 
   const invoiceColumns: ColumnDef<Invoice>[] = [
     {

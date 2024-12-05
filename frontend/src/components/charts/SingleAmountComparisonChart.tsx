@@ -1,4 +1,5 @@
 import { XAxis, Cell, Bar, BarChart as UIBarChart } from 'recharts';
+import { formatAmount } from '@/lib/utils';
 import { ChartContainer } from '@/components/ui/chart';
 import { chartConfig } from '@/constants';
 
@@ -27,7 +28,13 @@ export function SingleAmountComparisonChart({
           right: 20,
         }}
       >
-        <Bar dataKey="amount" label={{ position: 'top' }}>
+        <Bar
+          dataKey="amount"
+          label={{
+            position: 'top',
+            formatter: (value: number) => formatAmount(value),
+          }}
+        >
           {chartData.map(({ name, color }) => (
             <Cell key={name} fill={color} />
           ))}

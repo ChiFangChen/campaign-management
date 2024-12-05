@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
-
+import { chartConfig } from '@/constants';
+import { formatAmount } from '@/lib/utils';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
-import { chartConfig } from '@/constants';
 
 type TotalAmountChartProps = {
   isLoading?: boolean;
@@ -50,7 +50,7 @@ export function TabbedAmountComparisonChart({ isLoading, lineItems = [] }: Total
                   {isLoading ? (
                     <Skeleton className="h-6 w-24" />
                   ) : (
-                    total[key as keyof typeof total].toLocaleString()
+                    formatAmount(total[key as keyof typeof total])
                   )}
                 </span>
               </button>

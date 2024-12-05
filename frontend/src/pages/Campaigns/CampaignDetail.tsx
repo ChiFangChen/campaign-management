@@ -1,6 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { CellContext } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
+
+import { routes } from '@/routes';
+import { readableDate, formatAmount } from '@/lib/utils';
 import { useCampaignDetail } from '@/queries/campaigns';
+import { usePagination } from '@/hooks';
 import {
   Breadcrumb,
   Title,
@@ -10,9 +14,6 @@ import {
   Button,
   Skeleton,
 } from '@/components';
-import { usePagination } from '@/hooks';
-import { routes } from '@/routes';
-import { readableDate } from '@/lib/utils';
 
 const breadcrumbList = [
   {
@@ -27,19 +28,17 @@ export const CampaignDetail = () => {
   const { data, isLoading, isFetching } = useCampaignDetail(id as string);
   const paginationState = usePagination();
 
-  console.log('data', data);
-
-  const lineItemColumns = [
+  const lineItemColumns: ColumnDef<CampaignDetailLineItem>[] = [
     {
       accessorKey: 'name',
       header: 'Name',
     },
     {
-      accessorKey: 'bookedAmount',
+      accessorFn: ({ bookedAmount }) => formatAmount(bookedAmount),
       header: 'Booked Amount',
     },
     {
-      accessorKey: 'actualAmount',
+      accessorFn: ({ actualAmount }) => formatAmount(actualAmount),
       header: 'Actual Amount',
     },
     {
@@ -48,36 +47,33 @@ export const CampaignDetail = () => {
         row: {
           original: { invoices },
         },
-      }: CellContext<CampaignDetailLineItem, string>) => {
-        console.log('getValue', invoices);
-        return (
-          <div className="flex gap-1">
-            {invoices?.map((invoice) => (
-              <Tooltip
-                key={invoice.id}
-                content={
-                  <>
-                    <div>Created: {readableDate(invoice.createdAt)}</div>
-                    <div>Last Updated: {readableDate(invoice.updatedAt)}</div>
-                  </>
-                }
+      }) => (
+        <div className="flex gap-1">
+          {invoices?.map((invoice) => (
+            <Tooltip
+              key={invoice.id}
+              content={
+                <>
+                  <div>Created: {readableDate(invoice.createdAt)}</div>
+                  <div>Last Updated: {readableDate(invoice.updatedAt)}</div>
+                </>
+              }
+            >
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`${routes.invoices}/${invoice.id}`);
+                }}
+                size="sm"
+                variant="ghost"
+                className="h-auto hover:bg-gray-200"
               >
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`${routes.invoices}/${invoice.id}`);
-                  }}
-                  size="sm"
-                  variant="ghost"
-                  className="h-auto hover:bg-gray-200"
-                >
-                  View
-                </Button>
-              </Tooltip>
-            ))}
-          </div>
-        );
-      },
+                View
+              </Button>
+            </Tooltip>
+          ))}
+        </div>
+      ),
     },
   ];
 

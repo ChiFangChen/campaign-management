@@ -43,10 +43,10 @@ declare global {
   type Campaign = {
     id: number;
     name: string;
-    bookedAmount: number;
-    actualAmount: number;
+    bookedTotalAmount: number;
+    actualTotalAmount: number;
     invoicesCount: number;
-    campaign: BasicItem;
+    lineItemsCount: number;
   };
 
   type CampaignDetailLineItem = {

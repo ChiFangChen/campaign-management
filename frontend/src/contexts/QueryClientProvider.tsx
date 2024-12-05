@@ -5,7 +5,7 @@ import {
   QueryClientProvider as RQQueryClientProvider,
 } from '@tanstack/react-query';
 
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks';
 
 const getErrorHandler = (toast: ReturnType<typeof useToast>['toast']) => (error: unknown) => {
   let title = 'Unknown Error';
