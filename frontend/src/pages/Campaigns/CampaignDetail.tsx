@@ -1,19 +1,22 @@
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
-import { readableTime, formatAmount } from '@/lib/formatter-utils';
+import { readableTime } from '@/lib/formatter-utils';
 import { useCampaignDetail } from '@/queries/campaigns';
 import { usePagination } from '@/hooks';
 import {
   Breadcrumb,
   Title,
   Table,
+  AmountTableCell,
   Tooltip,
   TabbedAmountComparisonChart,
   Button,
   Skeleton,
 } from '@/components';
+import { TableRow, TableCell } from '@/components/ui/table';
 
 const breadcrumbList = [
   {
@@ -27,6 +30,18 @@ export const CampaignDetail = () => {
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useCampaignDetail(id as string);
   const paginationState = usePagination();
+  const { totalBookedAmount, totalActualAmount, filteredLineItemData } = useMemo(() => {
+    const filteredLineItemData = data?.lineItems || [];
+    const totalBookedAmount = filteredLineItemData.reduce(
+      (acc, item) => acc + item.bookedAmount,
+      0
+    );
+    const totalActualAmount = filteredLineItemData.reduce(
+      (acc, item) => acc + item.actualAmount,
+      0
+    );
+    return { totalBookedAmount, totalActualAmount, filteredLineItemData };
+  }, [data]);
 
   const lineItemColumns: ColumnDef<CampaignDetailLineItem>[] = [
     {
@@ -34,12 +49,18 @@ export const CampaignDetail = () => {
       header: 'Name',
     },
     {
-      accessorFn: ({ bookedAmount }) => formatAmount(bookedAmount),
+      accessorKey: 'bookedAmount',
       header: 'Booked Amount',
+      meta: {
+        type: 'currency',
+      },
     },
     {
-      accessorFn: ({ actualAmount }) => formatAmount(actualAmount),
+      accessorKey: 'actualAmount',
       header: 'Actual Amount',
+      meta: {
+        type: 'currency',
+      },
     },
     {
       header: 'Invoices',
@@ -48,7 +69,7 @@ export const CampaignDetail = () => {
           original: { invoices },
         },
       }) => (
-        <div className="flex gap-1">
+        <div className="flex gap-1 justify-end">
           {invoices?.map((invoice) => (
             <Tooltip
               key={invoice.id}
@@ -74,6 +95,9 @@ export const CampaignDetail = () => {
           ))}
         </div>
       ),
+      meta: {
+        className: 'text-right',
+      },
     },
   ];
 
@@ -86,7 +110,7 @@ export const CampaignDetail = () => {
         <h2 className="text-lg mt-2">Line Items</h2>
         <Table
           columns={lineItemColumns}
-          data={data?.lineItems || []}
+          data={filteredLineItemData}
           isFetching={isFetching}
           isLoading={isLoading}
           paginationState={paginationState}
@@ -95,6 +119,14 @@ export const CampaignDetail = () => {
           }}
           goTopOnPaging={false}
           manualPagination={false}
+          footer={
+            <TableRow>
+              <TableCell>Total</TableCell>
+              <AmountTableCell amount={totalBookedAmount} />
+              <AmountTableCell amount={totalActualAmount} />
+              <TableCell />
+            </TableRow>
+          }
         />
       </div>
     </div>

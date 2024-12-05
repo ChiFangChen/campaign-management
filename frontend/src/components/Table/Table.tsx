@@ -6,6 +6,10 @@ import {
   getPaginationRowModel,
   Row,
 } from '@tanstack/react-table';
+
+import { cn } from '@/lib/utils';
+import { UsePaginationReturn } from '@/hooks';
+import { Loader } from '@/components/Loader';
 import {
   Table as UITable,
   TableBody,
@@ -13,10 +17,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from '@/components/ui/table';
-import { Loader } from '@/components/Loader';
-import { UsePaginationReturn } from '@/hooks';
 import { SkeletonCell } from './SkeletonCell';
+import { AmountTableCell } from './AmountTableCell';
 import { Pagination } from './Pagination';
 
 interface DataTableProps<TData, TValue> {
@@ -30,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   manualPagination?: boolean;
   goTopOnPaging?: boolean;
   isBordered?: boolean;
+  footer?: React.ReactNode;
 }
 
 export const Table = <TData, TValue>({
@@ -43,6 +48,7 @@ export const Table = <TData, TValue>({
   goTopOnPaging = true,
   manualPagination = true,
   isBordered = true,
+  footer,
 }: DataTableProps<TData, TValue>) => {
   const getPaginationConfig = () => ({
     state: { pagination: paginationState!.pagination },
@@ -68,21 +74,25 @@ export const Table = <TData, TValue>({
 
   return (
     <div className="container mx-auto my-4">
-      <div className={`rounded-md relative${isBordered ? ' border' : ''}`}>
+      <div className={cn('rounded-md relative', isBordered ? 'border' : '')}>
         {!isLoading && isFetching && <Loader />}
         <UITable>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className={cn(
+                      header.column.columnDef.meta?.className || '',
+                      header.column.columnDef.meta?.type === 'currency' ? 'text-right' : ''
+                    )}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -103,11 +113,22 @@ export const Table = <TData, TValue>({
                   onClick={() => onRowClick?.(row)}
                   className={onRowClick ? 'cursor-pointer' : ''}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) =>
+                    cell.column.columnDef.meta?.type === 'currency' ? (
+                      <AmountTableCell
+                        key={cell.id}
+                        amount={cell.getValue() as number}
+                        className={cell.column.columnDef.meta?.className || ''}
+                      />
+                    ) : (
+                      <TableCell
+                        key={cell.id}
+                        className={cell.column.columnDef.meta?.className || ''}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    )
+                  )}
                 </TableRow>
               ))
             ) : (
@@ -118,6 +139,7 @@ export const Table = <TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          {footer && <TableFooter>{footer}</TableFooter>}
         </UITable>
       </div>
 
