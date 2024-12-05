@@ -16,7 +16,6 @@ const breadcrumbList = [
 export const InvoiceDetail = () => {
   const { id } = useParams();
   const { data, isLoading, isFetching } = useInvoiceDetail(id as string);
-  console.log('data', data);
 
   return (
     <div>

@@ -1,6 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { styled } from 'styled-components';
+import { formatAmount } from '@/lib/utils';
 import {
   Card,
   CardHeader,
@@ -36,7 +37,7 @@ const columns: ColumnDef<InvoiceDetailCampaignLineItem>[] = [
     header: 'Name',
   },
   {
-    accessorKey: 'actualAmount',
+    accessorFn: ({ actualAmount }) => formatAmount(actualAmount),
     header: 'Amount',
   },
 ];
@@ -77,7 +78,7 @@ export const CampaignCard = ({ campaign, isFetching, isLoading }: CampaignCardPr
       </StyledCardContent>
       <CardFooter className="justify-end pt-4">
         <span className="mr-2 text-gray-700 text-sm">Total</span>{' '}
-        <span className="text-lg text-black">{campaign.totalAmount}</span>
+        <span className="text-lg text-black">{formatAmount(campaign.totalAmount)}</span>
       </CardFooter>
     </Card>
   );
