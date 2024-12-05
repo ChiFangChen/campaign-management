@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
-import { readableDate } from '@/lib/utils';
+import { readableTime } from '@/lib/utils';
 import { usePagination } from '@/hooks';
 import { useLineItemDetail } from '@/queries/line-items';
 import { Breadcrumb, Title, Table, SingleAmountComparisonChart, Skeleton } from '@/components';
@@ -19,11 +19,11 @@ export const LineItemDetail = () => {
       header: 'ID',
     },
     {
-      accessorFn: ({ createdAt }) => readableDate(createdAt),
+      accessorFn: ({ createdAt }) => readableTime(createdAt),
       header: 'Created At',
     },
     {
-      accessorFn: ({ updatedAt }) => readableDate(updatedAt),
+      accessorFn: ({ updatedAt }) => readableTime(updatedAt),
       header: 'Last Updated At',
     },
   ];

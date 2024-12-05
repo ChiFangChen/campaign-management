@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/routes';
-import { readableDate, formatAmount } from '@/lib/utils';
+import { readableTime, formatAmount } from '@/lib/utils';
 import { usePagination } from '@/hooks';
 import { useInvoices } from '@/queries/invoices';
 import { Title, Table } from '@/components';
@@ -13,11 +13,11 @@ const columns: ColumnDef<Invoice>[] = [
     header: 'ID',
   },
   {
-    accessorFn: ({ createdAt }) => readableDate(createdAt),
+    accessorFn: ({ createdAt }) => readableTime(createdAt),
     header: 'Created At',
   },
   {
-    accessorFn: ({ updatedAt }) => readableDate(updatedAt),
+    accessorFn: ({ updatedAt }) => readableTime(updatedAt),
     header: 'Last Updated At',
   },
   {

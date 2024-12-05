@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { routes } from '@/routes';
-import { readableDate } from '@/lib/utils';
+import { readableTime } from '@/lib/utils';
 import { useInvoiceDetail } from '@/queries/invoices';
 import { Breadcrumb, Title, Skeleton } from '@/components';
 import { AmountCard } from './AmountCard';
@@ -24,8 +24,8 @@ export const InvoiceDetail = () => {
         <Title>{data?.id || <Skeleton className="h-6 w-32" />}</Title>
         {data && (
           <div className="text-xs text-gray-500 text-right">
-            <div>Created: {readableDate(data.createdAt)}</div>
-            <div>Last Updated: {readableDate(data.updatedAt)}</div>
+            <div>Created: {readableTime(data.createdAt)}</div>
+            <div>Last Updated: {readableTime(data.updatedAt)}</div>
           </div>
         )}
       </div>

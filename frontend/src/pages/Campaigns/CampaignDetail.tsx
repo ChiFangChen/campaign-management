@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
-import { readableDate, formatAmount } from '@/lib/utils';
+import { readableTime, formatAmount } from '@/lib/utils';
 import { useCampaignDetail } from '@/queries/campaigns';
 import { usePagination } from '@/hooks';
 import {
@@ -54,8 +54,8 @@ export const CampaignDetail = () => {
               key={invoice.id}
               content={
                 <>
-                  <div>Created: {readableDate(invoice.createdAt)}</div>
-                  <div>Last Updated: {readableDate(invoice.updatedAt)}</div>
+                  <div>Created: {readableTime(invoice.createdAt)}</div>
+                  <div>Last Updated: {readableTime(invoice.updatedAt)}</div>
                 </>
               }
             >
