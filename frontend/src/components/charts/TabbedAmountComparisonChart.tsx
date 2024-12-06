@@ -8,30 +8,34 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 type TotalAmountChartProps = {
   isLoading?: boolean;
-  lineItems?: CampaignDetailLineItem[];
+  data?: {
+    totalBookedAmount?: number;
+    totalActualAmount?: number;
+    comparisonData?: ComparisonData[];
+  };
 };
 
-export function TabbedAmountComparisonChart({ isLoading, lineItems = [] }: TotalAmountChartProps) {
+export function TabbedAmountComparisonChart({ isLoading, data }: TotalAmountChartProps) {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>('actual');
 
   const { total, chartData } = React.useMemo(
     () => ({
       total: {
-        actual: lineItems.reduce((acc, curr) => acc + curr.actualAmount, 0),
-        booked: lineItems.reduce((acc, curr) => acc + curr.bookedAmount, 0),
+        actual: data?.totalActualAmount,
+        booked: data?.totalBookedAmount,
       },
-      chartData: lineItems.map((item) => ({
-        name: item.name,
-        actual: item.actualAmount,
-        booked: item.bookedAmount,
+      chartData: (data?.comparisonData || []).map((item) => ({
+        name: item.campaignName,
+        actual: item.totalActual,
+        booked: item.totalBooked,
       })),
     }),
-    [lineItems]
+    [data]
   );
 
   return (
     <div className="container mx-auto mt-5">
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-2 p-0 sm:flex-row rounded-sm">
+      <CardHeader className="flex flex-col items-stretch space-y-0 border-2 p-0 sm:flex-row rounded-xl">
         <div className="flex flex-1 flex-col justify-center gap-1 px-3 py-2">
           <CardTitle>Total Amount</CardTitle>
         </div>

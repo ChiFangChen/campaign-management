@@ -33,7 +33,8 @@ export const readableTime = (dateString: string, locale: string = 'en-US') => {
   return formatter.format(date);
 };
 
-export function formatAmount(value: number, locale = 'en-US', currency = 'USD') {
+export function formatAmount(value?: number, locale = 'en-US', currency = 'USD') {
+  if (value === undefined) return value;
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,

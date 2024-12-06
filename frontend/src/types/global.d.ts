@@ -117,6 +117,26 @@ declare global {
     totalActualAmount: number;
     campaigns: InvoiceDetailCampaign[];
   };
+
+  type ComparisonData = {
+    id: number;
+    campaignName: string;
+    totalBooked: number;
+    totalActual: number;
+  };
+
+  type DashboardData = {
+    totalCampaigns: number;
+    totalLineItems: number;
+    totalBookedAmount: number;
+    totalActualAmount: number;
+    totalAdjustments: number;
+    amount: {
+      totalBookedAmount?: number;
+      totalActualAmount?: number;
+      comparisonData?: ComparisonData[];
+    };
+  };
 }
 
 export {};
