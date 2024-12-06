@@ -14,8 +14,7 @@ Rails.application.routes.draw do
       resources :line_items, only: [:show]
       resources :invoices, only: [:index, :show, :update]
 
-      get '/dashboard', to: 'dashboard#index'
+      get "/dashboard", to: "dashboard#index"
     end
   end
-  
 end

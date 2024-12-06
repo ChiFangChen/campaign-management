@@ -8,9 +8,9 @@ class Api::V1::InvoicesController < ApplicationController
       pagination: {
         current_page: invoices.current_page,
         total_pages: invoices.total_pages,
-        total_count: invoices.total_count
+        total_count: invoices.total_count,
       },
-      data: invoices.map { |invoice| format_invoice_summary(invoice) }
+      data: invoices.map { |invoice| format_invoice_summary(invoice) },
     }
   end
 
@@ -19,7 +19,7 @@ class Api::V1::InvoicesController < ApplicationController
 
     render json: format_invoice_detail(invoice)
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Invoice not found' }, status: :not_found
+    render json: { error: "Invoice not found" }, status: :not_found
   end
 
   def update
@@ -27,18 +27,18 @@ class Api::V1::InvoicesController < ApplicationController
 
     if invoice.update(adjustments: params[:adjustments])
       render json: {
-        message: 'Invoice updated successfully',
+        message: "Invoice updated successfully",
         invoice: {
           id: invoice.id,
           adjustments: invoice.adjustments.to_f.round(2),
-          updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S')
-        }
+          updated_at: invoice.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
+        },
       }, status: :ok
     else
       render json: { errors: invoice.errors.full_messages }, status: :unprocessable_entity
     end
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Invoice not found' }, status: :not_found
+    render json: { error: "Invoice not found" }, status: :not_found
   end
 
   private
@@ -48,9 +48,9 @@ class Api::V1::InvoicesController < ApplicationController
 
     {
       id: invoice.id,
-      created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-      updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
-      total_amount: total_amount.round(2)
+      created_at: invoice.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+      updated_at: invoice.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
+      total_amount: total_amount.round(2),
     }
   end
 
@@ -62,20 +62,20 @@ class Api::V1::InvoicesController < ApplicationController
       adjustments: invoice.adjustments.to_f.round(2),
       campaigns: invoice.line_items.map(&:campaign).uniq.map { |campaign| format_campaign_data(campaign, invoice.id) },
       total_actual_amount: total_actual_amount.round(2),
-      created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-      updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+      created_at: invoice.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+      updated_at: invoice.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
     }
   end
 
   def format_campaign_data(campaign, invoice_id)
     filtered_line_items = campaign.line_items.joins(:invoice_line_items)
-                                             .where(invoice_line_items: { invoice_id: invoice_id })
+      .where(invoice_line_items: { invoice_id: invoice_id })
 
     {
       id: campaign.id,
       name: campaign.name,
       total_amount: filtered_line_items.sum(:actual_amount).to_f.round(2),
-      line_items: filtered_line_items.map { |line_item| format_line_item_data(line_item) }
+      line_items: filtered_line_items.map { |line_item| format_line_item_data(line_item) },
     }
   end
 
@@ -83,7 +83,7 @@ class Api::V1::InvoicesController < ApplicationController
     {
       id: line_item.id,
       name: line_item.name,
-      actual_amount: line_item.actual_amount.to_f.round(2)
+      actual_amount: line_item.actual_amount.to_f.round(2),
     }
   end
 end

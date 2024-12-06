@@ -1,6 +1,6 @@
-require 'json'
+require "json"
 
-file_path = Rails.root.join('db', 'data', 'placements_teaser_data.json')
+file_path = Rails.root.join("db", "data", "placements_teaser_data.json")
 data = JSON.parse(File.read(file_path))
 
 ActiveRecord::Base.transaction do
@@ -12,7 +12,7 @@ ActiveRecord::Base.transaction do
   data.each do |entry|
     campaign = Campaign.find_or_create_by(
       id: entry["campaign_id"],
-      name: entry["campaign_name"]
+      name: entry["campaign_name"],
     )
 
     line_item = LineItem.find_or_create_by(
@@ -20,7 +20,7 @@ ActiveRecord::Base.transaction do
       name: entry["line_item_name"],
       booked_amount: entry["booked_amount"],
       actual_amount: entry["actual_amount"],
-      campaign: campaign
+      campaign: campaign,
     )
 
     invoice = Invoice.create!(adjustments: entry["adjustments"])

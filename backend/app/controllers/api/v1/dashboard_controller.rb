@@ -7,8 +7,8 @@ class Api::V1::DashboardController < ApplicationController
       amount: {
         total_booked_amount: format_amount(LineItem.sum(:booked_amount)),
         total_actual_amount: format_amount(LineItem.sum(:actual_amount)),
-        comparison_data: formatted_comparison_data
-      }
+        comparison_data: formatted_comparison_data,
+      },
     }
   end
 
@@ -26,7 +26,7 @@ class Api::V1::DashboardController < ApplicationController
       {
         campaign_name: record.campaign_name,
         total_booked: format_amount(record.total_booked),
-        total_actual: format_amount(record.total_actual)
+        total_actual: format_amount(record.total_actual),
       }
     end
   end

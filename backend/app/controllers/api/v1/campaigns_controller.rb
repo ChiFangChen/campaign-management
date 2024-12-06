@@ -17,9 +17,9 @@ class Api::V1::CampaignsController < ApplicationController
           booked_total_amount: campaign.line_items.sum(:booked_amount).to_f.round(2),
           actual_total_amount: campaign.line_items.sum(:actual_amount).to_f.round(2),
           line_items_count: campaign.line_items.size,
-          invoices_count: campaign.line_items.joins(:invoices).distinct.count('invoices.id')
+          invoices_count: campaign.line_items.joins(:invoices).distinct.count("invoices.id"),
         }
-      end
+      end,
     }
   end
 
@@ -39,12 +39,12 @@ class Api::V1::CampaignsController < ApplicationController
             {
               id: invoice.id,
               adjustments: invoice.adjustments.to_f.round(2),
-              created_at: invoice.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-              updated_at: invoice.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+              created_at: invoice.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+              updated_at: invoice.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
             }
-          end
+          end,
         }
-      end
+      end,
     }
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Campaign with id #{params[:id]} not found" }, status: :not_found
