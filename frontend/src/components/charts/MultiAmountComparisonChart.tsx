@@ -1,6 +1,7 @@
 import { Bar, BarChart } from 'recharts';
 
 import { chartConfig } from '@/constants';
+import { formatAmount } from '@/lib/formatter-utils';
 import {
   ChartContainer,
   ChartTooltip,
@@ -28,6 +29,7 @@ export const MultiAmountComparisonChart = ({ data }: MultiAmountComparisonChartP
                 const dataIndex = payload?.[0]?.payload;
                 return dataIndex?.name || value;
               }}
+              valueFormatter={(value) => formatAmount(value as number)}
             />
           }
         />

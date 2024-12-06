@@ -82,6 +82,7 @@ export function TabbedAmountComparisonChart({ isLoading, data }: TotalAmountChar
                     const dataIndex = payload?.[0]?.payload;
                     return dataIndex?.name || value;
                   }}
+                  valueFormatter={(value) => formatAmount(value as number)}
                 />
               }
             />
