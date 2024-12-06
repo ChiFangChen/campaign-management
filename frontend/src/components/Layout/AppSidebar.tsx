@@ -1,5 +1,5 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ChartColumnIncreasing, TableProperties, Receipt, Plus } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { ChartColumnIncreasing, TableProperties, Receipt } from 'lucide-react';
 import {
   Sidebar,
   SidebarHeader,
@@ -10,7 +10,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuAction,
 } from '@/components/ui/sidebar';
 import { routes } from '@/routes';
 
@@ -32,11 +31,6 @@ const routesItems = [
         title: 'Campaigns',
         url: routes.campaigns,
         icon: TableProperties,
-        action: (pushPage: ReturnType<typeof useNavigate>) => (
-          <SidebarMenuAction onClick={() => pushPage('/campaigns?create=true')}>
-            <Plus /> <span className="sr-only">Add Project</span>
-          </SidebarMenuAction>
-        ),
       },
       {
         title: 'Invoices',
@@ -49,7 +43,6 @@ const routesItems = [
 
 export const AppSidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   return (
     <Sidebar>
       <SidebarHeader className="p-4">Campaign Management</SidebarHeader>
@@ -75,7 +68,6 @@ export const AppSidebar = () => {
                           <span>{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
-                      {item.action?.(navigate)}
                     </SidebarMenuItem>
                   );
                 })}
