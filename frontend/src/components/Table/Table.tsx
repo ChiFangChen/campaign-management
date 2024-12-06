@@ -4,12 +4,15 @@ import {
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
   Row,
 } from '@tanstack/react-table';
+import { MoveVertical, MoveUp, MoveDown, Search } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { UsePaginationReturn } from '@/hooks';
-import { Loader } from '@/components/Loader';
+import { UsePaginationReturn, UseTableFiltersReturn, UseTableSortingReturn } from '@/hooks';
+import { Loader, Input, Button, Popover, PopoverContent, PopoverTrigger } from '@/components';
 import {
   Table as UITable,
   TableBody,
@@ -30,11 +33,15 @@ interface DataTableProps<TData, TValue> {
   isLoading?: boolean;
   isFetching?: boolean;
   paginationState?: UsePaginationReturn;
+  filtersState?: UseTableFiltersReturn;
+  sortingState?: UseTableSortingReturn;
   onRowClick?: (row: Row<TData>) => void;
   manualPagination?: boolean;
+  manualSorting?: boolean;
+  manualFiltering?: boolean;
   goTopOnPaging?: boolean;
   isBordered?: boolean;
-  footer?: React.ReactNode;
+  footer?: React.ReactNode | ((filteredRows: Row<TData>[]) => React.ReactNode);
 }
 
 export const Table = <TData, TValue>({
@@ -44,6 +51,8 @@ export const Table = <TData, TValue>({
   isLoading = false,
   isFetching = false,
   paginationState,
+  filtersState,
+  sortingState,
   onRowClick,
   goTopOnPaging = true,
   manualPagination = true,
@@ -51,7 +60,6 @@ export const Table = <TData, TValue>({
   footer,
 }: DataTableProps<TData, TValue>) => {
   const getPaginationConfig = () => ({
-    state: { pagination: paginationState!.pagination },
     onPaginationChange: paginationState!.setPagination,
     ...(manualPagination
       ? {
@@ -68,9 +76,31 @@ export const Table = <TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    state: {
+      pagination: paginationState?.pagination || { pageIndex: 0, pageSize: 10 },
+      columnFilters: filtersState?.filters || [],
+      sorting: sortingState?.sorting || [],
+    },
     ...(paginationState ? getPaginationConfig() : {}),
+    ...(filtersState
+      ? {
+          getFilteredRowModel: getFilteredRowModel(),
+          onColumnFiltersChange: filtersState.setFilters,
+        }
+      : {}),
+    ...(sortingState
+      ? {
+          getSortedRowModel: getSortedRowModel(),
+          onSortingChange: sortingState.setSorting,
+        }
+      : {}),
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const filteredRows = table.getFilteredRowModel().rows;
+  const pageCount = filtersState
+    ? Math.ceil(filteredRows.length / table.getState().pagination.pageSize)
+    : table.getPageCount();
 
   return (
     <div className="container mx-auto my-4">
@@ -80,19 +110,69 @@ export const Table = <TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className={cn(
-                      header.column.columnDef.meta?.className || '',
-                      header.column.columnDef.meta?.type === 'currency' ? 'text-right' : ''
-                    )}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  const { meta, header: headerText } = header.column.columnDef;
+                  return (
+                    <TableHead key={header.id} className="">
+                      <div
+                        className={cn(
+                          'flex items-center',
+                          meta?.className || '',
+                          meta?.type === 'currency' || meta?.align === 'right'
+                            ? 'text-right justify-end'
+                            : '',
+                          meta?.align === 'center' ? 'text-center justify-center' : ''
+                        )}
+                      >
+                        {header.isPlaceholder ? null : meta?.sortable ? (
+                          <div
+                            className={cn(
+                              'flex items-center',
+                              header.column.getCanSort() ? 'cursor-pointer' : ''
+                            )}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            <div>{flexRender(headerText, header.getContext())}</div>
+                            <div>
+                              {header.column.getIsSorted() ? (
+                                header.column.getIsSorted() === 'desc' ? (
+                                  <MoveDown className="h-4" />
+                                ) : (
+                                  <MoveUp className="h-4" />
+                                )
+                              ) : (
+                                <MoveVertical className="h-4" />
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          flexRender(headerText, header.getContext())
+                        )}
+                        {meta?.filterId && header.column.getCanFilter() && (
+                          <Popover>
+                            <PopoverTrigger>
+                              <Search className="h-4" />
+                            </PopoverTrigger>
+                            <PopoverContent className="w-80 flex gap-4">
+                              <Input
+                                placeholder={`Filter ${headerText}`}
+                                className="text-xs border rounded ml-0"
+                                value={(header.column.getFilterValue() as string) || ''}
+                                onChange={(e) => header.column.setFilterValue(e.target.value)}
+                              />
+                              <Button
+                                variant="outline"
+                                onClick={() => header.column.setFilterValue('')}
+                              >
+                                Reset
+                              </Button>
+                            </PopoverContent>
+                          </Popover>
+                        )}
+                      </div>
+                    </TableHead>
+                  );
+                })}
               </TableRow>
             ))}
           </TableHeader>
@@ -139,7 +219,11 @@ export const Table = <TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {footer && <TableFooter>{footer}</TableFooter>}
+          {footer && (
+            <TableFooter>
+              {typeof footer === 'function' ? footer(filteredRows) : footer}
+            </TableFooter>
+          )}
         </UITable>
       </div>
 
@@ -151,7 +235,7 @@ export const Table = <TData, TValue>({
           canNextPage={table.getCanNextPage()}
           nextPage={table.nextPage}
           goToPage={(pageIndex: number) => table.setPageIndex(pageIndex)}
-          totalPages={table.getPageCount()}
+          totalPages={pageCount}
           goTopOnPaging={goTopOnPaging}
         />
       )}

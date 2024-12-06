@@ -1,11 +1,10 @@
-import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, Row } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
 import { useCampaignDetail } from '@/queries/campaigns';
-import { usePagination } from '@/hooks';
+import { usePagination, useTableFilters, useTableSorting } from '@/hooks';
 import {
   Breadcrumb,
   Title,
@@ -30,29 +29,22 @@ export const CampaignDetail = () => {
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useCampaignDetail(id as string);
   const paginationState = usePagination();
-  const { totalBookedAmount, totalActualAmount, filteredLineItemData } = useMemo(() => {
-    const filteredLineItemData = data?.lineItems || [];
-    const totalBookedAmount = filteredLineItemData.reduce(
-      (acc, item) => acc + item.bookedAmount,
-      0
-    );
-    const totalActualAmount = filteredLineItemData.reduce(
-      (acc, item) => acc + item.actualAmount,
-      0
-    );
-    return { totalBookedAmount, totalActualAmount, filteredLineItemData };
-  }, [data]);
+  const filtersState = useTableFilters();
+  const sortingState = useTableSorting();
 
   const lineItemColumns: ColumnDef<CampaignDetailLineItem>[] = [
     {
+      id: 'name',
       accessorKey: 'name',
       header: 'Name',
+      meta: { filterId: 'name', sortable: true },
     },
     {
       accessorKey: 'bookedAmount',
       header: 'Booked Amount',
       meta: {
         type: 'currency',
+        sortable: true,
       },
     },
     {
@@ -60,9 +52,11 @@ export const CampaignDetail = () => {
       header: 'Actual Amount',
       meta: {
         type: 'currency',
+        sortable: true,
       },
     },
     {
+      accessorKey: 'invoices',
       header: 'Invoices',
       cell: ({
         row: {
@@ -95,11 +89,37 @@ export const CampaignDetail = () => {
           ))}
         </div>
       ),
+      sortingFn: (a, b) => {
+        const aHasInvoices = (a.original.invoices?.length || 0) > 0 ? 1 : 0;
+        const bHasInvoices = (b.original.invoices?.length || 0) > 0 ? 1 : 0;
+
+        return aHasInvoices - bHasInvoices;
+      },
       meta: {
-        className: 'text-right',
+        align: 'right',
+        sortable: true,
       },
     },
   ];
+
+  const renderFooter = (filteredLineItemData: Row<CampaignDetailLineItem>[]) => {
+    const totalBookedAmount = filteredLineItemData.reduce(
+      (acc, item) => acc + item.original.bookedAmount,
+      0
+    );
+    const totalActualAmount = filteredLineItemData.reduce(
+      (acc, item) => acc + item.original.actualAmount,
+      0
+    );
+    return (
+      <TableRow>
+        <TableCell>Total</TableCell>
+        <AmountTableCell amount={totalBookedAmount} />
+        <AmountTableCell amount={totalActualAmount} />
+        <TableCell />
+      </TableRow>
+    );
+  };
 
   return (
     <div>
@@ -110,23 +130,18 @@ export const CampaignDetail = () => {
         <h2 className="text-lg mt-2">Line Items</h2>
         <Table
           columns={lineItemColumns}
-          data={filteredLineItemData}
+          data={data?.lineItems || []}
           isFetching={isFetching}
           isLoading={isLoading}
           paginationState={paginationState}
+          filtersState={filtersState}
+          sortingState={sortingState}
           onRowClick={(row) => {
             navigate(`${routes.lineItems}/${row.original.id}`);
           }}
           goTopOnPaging={false}
           manualPagination={false}
-          footer={
-            <TableRow>
-              <TableCell>Total</TableCell>
-              <AmountTableCell amount={totalBookedAmount} />
-              <AmountTableCell amount={totalActualAmount} />
-              <TableCell />
-            </TableRow>
-          }
+          footer={renderFooter}
         />
       </div>
     </div>
