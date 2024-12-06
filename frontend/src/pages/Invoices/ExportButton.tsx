@@ -1,5 +1,5 @@
 import { FileInput } from 'lucide-react';
-import { flattenDataToTable, exportToCSV } from '@/lib/file-utils';
+import { flattenDataToTable, exportToCSV, exportToXLS } from '@/lib/file-utils';
 import {
   Button,
   DropdownMenu,
@@ -14,10 +14,24 @@ type ExportButtonProps = {
   data: InvoiceDetail;
 };
 
+type ExportFileType = 'csv' | 'xls';
+
+const exportFileTypes: {
+  label: string;
+  type: ExportFileType;
+}[] = [
+  { label: 'CSV', type: 'csv' },
+  { label: 'XLS', type: 'xls' },
+];
+
 export const ExportButton = ({ data }: ExportButtonProps) => {
-  const onDownloadClick = () => {
+  const onDownloadClick = (type: ExportFileType) => () => {
     const flattenedTable = flattenDataToTable(data);
-    exportToCSV(data.id, flattenedTable);
+    if (type === 'csv') {
+      exportToCSV(data.id, flattenedTable);
+      return;
+    }
+    exportToXLS(data.id, flattenedTable);
   };
 
   return (
@@ -30,9 +44,11 @@ export const ExportButton = ({ data }: ExportButtonProps) => {
       <DropdownMenuContent>
         <DropdownMenuLabel>Export as</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={onDownloadClick}>
-          CSV
-        </DropdownMenuItem>
+        {exportFileTypes.map(({ label, type }) => (
+          <DropdownMenuItem key={type} className="cursor-pointer" onClick={onDownloadClick(type)}>
+            {label}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

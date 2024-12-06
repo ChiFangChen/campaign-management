@@ -1,3 +1,5 @@
+import * as XLSX from 'xlsx';
+
 function getFormattedDateTimeForFilename() {
   const formatter = new Intl.DateTimeFormat('zh-TW', {
     year: 'numeric',
@@ -32,10 +34,10 @@ export function flattenDataToTable(data: InvoiceDetail) {
       table.push({
         'Invoice ID': data.id,
         Adjustments: data.adjustments,
-        'Invoice Total Amount': data.adjustments + data.totalActualAmount,
+        'Invoice Total Amount': Number((data.adjustments + data.totalActualAmount).toFixed(2)),
         'Campaign ID': campaign.id,
         'Campaign Name': campaign.name,
-        'Line Item ID': item.name,
+        'Line Item ID': item.id,
         'Line Item Name': item.name,
         'Line Item Actual Amount': item.actualAmount,
       });
@@ -45,10 +47,27 @@ export function flattenDataToTable(data: InvoiceDetail) {
   return table;
 }
 
+export function exportToXLS(id: number, data: FlattenDataTable) {
+  const filename = `invoice-${id}-${getFormattedDateTimeForFilename()}.xlsx`;
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+  XLSX.writeFile(workbook, filename);
+}
+
+function escapeCSVValue(value: string | number) {
+  if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+  return value;
+}
+
 export function exportToCSV(id: number, data: FlattenDataTable) {
   const filename = `invoice-${id}-${getFormattedDateTimeForFilename()}.csv`;
   const csvHeaders = Object.keys(data[0]).join(',');
-  const csvRows = data.map((row) => Object.values(row).join(','));
+  const csvRows = data.map((row) => Object.values(row).map(escapeCSVValue).join(','));
   const csvContent = [csvHeaders, ...csvRows].join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
