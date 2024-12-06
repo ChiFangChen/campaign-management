@@ -232,7 +232,7 @@ export const Table = <TData, TValue>({
         </UITable>
       </div>
 
-      {!isLoading && (
+      {paginationState && !isLoading && (
         <Pagination
           currentPageIndex={table.getState().pagination.pageIndex}
           canPreviousPage={table.getCanPreviousPage()}
