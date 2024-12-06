@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       resources :campaigns, only: [:index, :show]
       resources :line_items, only: [:show]
       resources :invoices, only: [:index, :show, :update]
+
+      get '/dashboard', to: 'dashboard#index'
     end
   end
   
