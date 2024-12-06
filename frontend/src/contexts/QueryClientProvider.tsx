@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import {
   QueryClient,
   QueryCache,
@@ -24,7 +24,7 @@ const getErrorHandler = (toast: ReturnType<typeof useToast>['toast']) => (error:
   });
 };
 
-export const QueryClientProvider = ({ children }: { children: ReactNode }) => {
+export const QueryClientProvider = ({ children }: ComponentWithChildren) => {
   const { toast } = useToast();
   const [queryClient] = useState(
     () =>
