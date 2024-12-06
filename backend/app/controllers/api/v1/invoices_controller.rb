@@ -16,7 +16,6 @@ class Api::V1::InvoicesController < ApplicationController
 
   def show
     invoice = Invoice.includes(line_items: :campaign).find(params[:id])
-
     render json: format_invoice_detail(invoice)
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Invoice not found" }, status: :not_found
@@ -28,11 +27,7 @@ class Api::V1::InvoicesController < ApplicationController
     if invoice.update(adjustments: params[:adjustments])
       render json: {
         message: "Invoice updated successfully",
-        invoice: {
-          id: invoice.id,
-          adjustments: invoice.adjustments.to_f.round(2),
-          updated_at: invoice.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
-        },
+        invoice: format_invoice_summary(invoice),
       }, status: :ok
     else
       render json: { errors: invoice.errors.full_messages }, status: :unprocessable_entity
@@ -50,18 +45,16 @@ class Api::V1::InvoicesController < ApplicationController
       id: invoice.id,
       created_at: invoice.created_at.strftime("%Y-%m-%d %H:%M:%S"),
       updated_at: invoice.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
-      total_amount: total_amount.round(2),
+      total_amount: format_amount(total_amount),
     }
   end
 
   def format_invoice_detail(invoice)
-    total_actual_amount = invoice.line_items.sum(:actual_amount).to_f
-
     {
       id: invoice.id,
-      adjustments: invoice.adjustments.to_f.round(2),
       campaigns: invoice.line_items.map(&:campaign).uniq.map { |campaign| format_campaign_data(campaign, invoice.id) },
-      total_actual_amount: total_actual_amount.round(2),
+      adjustments: format_amount(invoice.adjustments),
+      total_actual_amount: format_amount(invoice.line_items.sum(:actual_amount)),
       created_at: invoice.created_at.strftime("%Y-%m-%d %H:%M:%S"),
       updated_at: invoice.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
     }
