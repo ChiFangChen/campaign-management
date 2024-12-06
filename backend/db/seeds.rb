@@ -25,3 +25,14 @@ data.each do |entry|
   invoice = Invoice.create!(adjustments: entry["adjustments"])
   invoice.line_items << line_item
 end
+
+# Create some data(Line Items in Campaign ID 3 & 4) to Invoice ID 7988
+ActiveRecord::Base.transaction do
+  target_invoice = Invoice.find(7988)
+
+  line_items = LineItem.where(campaign_id: [3, 4])
+
+  line_items.each do |line_item|
+    InvoiceLineItem.find_or_create_by(invoice: target_invoice, line_item: line_item)
+  end
+end
