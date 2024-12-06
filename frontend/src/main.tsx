@@ -7,6 +7,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
 import { rootRouter } from '@/routes/routers';
 
+import './i18n';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
