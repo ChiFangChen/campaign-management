@@ -1,5 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
-import { ChartColumnIncreasing, TableProperties, Receipt } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { ChartColumnIncreasing, TableProperties, Receipt, Settings } from 'lucide-react';
 import {
   Sidebar,
   SidebarHeader,
@@ -8,10 +8,10 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
+  SidebarFooter,
 } from '@/components/ui/sidebar';
 import { routes } from '@/routes';
+import { SidebarItem } from './SidebarItem';
 
 const routesItems = [
   {
@@ -58,17 +58,13 @@ export const AppSidebar = () => {
                       ? location.pathname === routes.dashboard
                       : location.pathname.includes(item.url);
                   return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <Link
-                          to={item.url}
-                          className={active ? 'bg-gray-300 hover:bg-gray-200' : ''}
-                        >
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <SidebarItem
+                      key={item.title}
+                      url={item.url}
+                      title={item.title}
+                      icon={item.icon}
+                      active={active}
+                    />
                   );
                 })}
               </SidebarMenu>
@@ -76,6 +72,16 @@ export const AppSidebar = () => {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarItem
+            url={routes.settings}
+            title="Settings"
+            icon={Settings}
+            active={location.pathname === routes.settings}
+          />
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };

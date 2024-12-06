@@ -3,4 +3,5 @@ export const routes = {
   campaigns: '/campaigns',
   lineItems: '/campaigns/line-items',
   invoices: '/invoices',
+  settings: '/settings',
 };
