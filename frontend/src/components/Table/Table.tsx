@@ -136,9 +136,9 @@ export const Table = <TData, TValue>({
                             <div>
                               {header.column.getIsSorted() ? (
                                 header.column.getIsSorted() === 'desc' ? (
-                                  <MoveDown className="h-4" />
+                                  <MoveDown className="h-4 text-black" />
                                 ) : (
-                                  <MoveUp className="h-4" />
+                                  <MoveUp className="h-4 text-black" />
                                 )
                               ) : (
                                 <MoveVertical className="h-4" />
@@ -151,7 +151,12 @@ export const Table = <TData, TValue>({
                         {meta?.filterId && header.column.getCanFilter() && (
                           <Popover>
                             <PopoverTrigger>
-                              <Search className="h-4" />
+                              <Search
+                                className={cn(
+                                  'h-4',
+                                  header.column.getFilterValue() ? 'text-black' : ''
+                                )}
+                              />
                             </PopoverTrigger>
                             <PopoverContent className="w-80 flex gap-4">
                               <Input
