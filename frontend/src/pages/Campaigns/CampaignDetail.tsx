@@ -11,7 +11,7 @@ import {
   Table,
   AmountTableCell,
   Tooltip,
-  TabbedAmountComparisonChart,
+  MultiAmountComparisonChart,
   Button,
   Skeleton,
 } from '@/components';
@@ -125,7 +125,7 @@ export const CampaignDetail = () => {
     <div>
       <Breadcrumb isLoading={isLoading} list={breadcrumbList} />
       <Title>{data?.name || <Skeleton className="h-6" />}</Title>
-      <TabbedAmountComparisonChart isLoading={isLoading} lineItems={data?.lineItems || []} />
+      <MultiAmountComparisonChart data={data?.lineItems || []} />
       <div>
         <h2 className="text-lg mt-2">Line Items</h2>
         <Table
