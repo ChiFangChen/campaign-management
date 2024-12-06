@@ -69,6 +69,7 @@ export const CampaignDetail = () => {
               key={invoice.id}
               content={
                 <>
+                  <div>{invoice.id}</div>
                   <div>Created: {readableTime(invoice.createdAt)}</div>
                   <div>Last Updated: {readableTime(invoice.updatedAt)}</div>
                 </>
