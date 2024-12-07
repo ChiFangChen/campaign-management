@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
@@ -37,19 +38,27 @@ export const InvoiceList = () => {
   ];
 
   return (
-    <div>
-      <Title>{t('invoices')}</Title>
-      <Table
-        columns={columns}
-        data={data?.data}
-        paginationData={data?.pagination}
-        isFetching={isFetching}
-        isLoading={isLoading}
-        paginationState={paginationState}
-        onRowClick={(row) => {
-          navigate(`${routes.invoices}/${row.original.id}`);
-        }}
-      />
-    </div>
+    <>
+      <Helmet>
+        <title>
+          {t('head.invoiceList.title', { titlePostFix: t('campaignManagementSystem') })}
+        </title>
+        <meta name="description" content={t('head.invoiceList.description')} />
+      </Helmet>
+      <div>
+        <Title>{t('invoices')}</Title>
+        <Table
+          columns={columns}
+          data={data?.data}
+          paginationData={data?.pagination}
+          isFetching={isFetching}
+          isLoading={isLoading}
+          paginationState={paginationState}
+          onRowClick={(row) => {
+            navigate(`${routes.invoices}/${row.original.id}`);
+          }}
+        />
+      </div>
+    </>
   );
 };

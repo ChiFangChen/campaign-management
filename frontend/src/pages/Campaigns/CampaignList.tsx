@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
@@ -46,19 +47,27 @@ export const CampaignList = () => {
   ];
 
   return (
-    <div>
-      <Title>{t('campaigns')}</Title>
-      <Table
-        columns={columns}
-        data={data?.data}
-        paginationData={data?.pagination}
-        isFetching={isFetching}
-        isLoading={isLoading}
-        paginationState={paginationState}
-        onRowClick={(row) => {
-          navigate(`${routes.campaigns}/${row.original.id}`);
-        }}
-      />
-    </div>
+    <>
+      <Helmet>
+        <title>
+          {t('head.campaignList.title', { titlePostFix: t('campaignManagementSystem') })}
+        </title>
+        <meta name="description" content={t('head.campaignList.description')} />
+      </Helmet>
+      <div>
+        <Title>{t('campaigns')}</Title>
+        <Table
+          columns={columns}
+          data={data?.data}
+          paginationData={data?.pagination}
+          isFetching={isFetching}
+          isLoading={isLoading}
+          paginationState={paginationState}
+          onRowClick={(row) => {
+            navigate(`${routes.campaigns}/${row.original.id}`);
+          }}
+        />
+      </div>
+    </>
   );
 };

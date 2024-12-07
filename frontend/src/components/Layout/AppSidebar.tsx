@@ -30,7 +30,7 @@ export const AppSidebar = () => {
       ],
     },
     {
-      label: t('management'),
+      label: t('managementModules'),
       items: [
         {
           title: t('campaigns'),
@@ -48,7 +48,7 @@ export const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarHeader className="p-4">{t('campaignManagement')}</SidebarHeader>
+      <SidebarHeader className="p-4">{t('campaignManagementSystem')}</SidebarHeader>
       <SidebarContent>
         {routesItems.map(({ label, items }) => (
           <SidebarGroup key={label || 'key'}>

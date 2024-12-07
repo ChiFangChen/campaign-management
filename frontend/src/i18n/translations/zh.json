@@ -1,6 +1,36 @@
 {
-  "campaignManagement": "行銷活動管理",
-  "management": "管理",
+  "head": {
+    "dashboard": {
+      "title": "儀表板 - {{titlePostFix}}",
+      "description": "查看關鍵行銷活動指標和績效數據的概覽。"
+    },
+    "campaignList": {
+      "title": "行銷活動列表 - {{titlePostFix}}",
+      "description": "探索行銷活動列表，並選擇一個以查看其詳細資訊。"
+    },
+    "campaignDetails": {
+      "title": "行銷活動詳細資訊 - {{titlePostFix}}",
+      "description": "深入了解所選行銷活動的詳細資訊，並管理其組件。"
+    },
+    "lineItemDetails": {
+      "title": "廣告項目詳細資訊 - {{titlePostFix}}",
+      "description": "訪問有關特定廣告項目的詳細資訊，包括相關發票和數據。"
+    },
+    "invoiceList": {
+      "title": "發票列表 - {{titlePostFix}}",
+      "description": "瀏覽發票列表，並選擇一個以查看其詳細資訊。"
+    },
+    "invoiceDetails": {
+      "title": "發票詳細資訊 - {{titlePostFix}}",
+      "description": "查看詳細的發票資訊，調整金額，並管理相關的廣告項目。"
+    },
+    "settings": {
+      "title": "設定 - {{titlePostFix}}",
+      "description": "通過調整主題和語言等設定來自定義您的體驗。"
+    }
+  },
+  "campaignManagementSystem": "行銷活動管理系統",
+  "managementModules": "管理模組",
   "dashboard": "儀表板",
   "campaign": "行銷活動",
   "campaigns": "行銷活動",

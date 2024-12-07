@@ -1,6 +1,36 @@
 {
-  "campaignManagement": "Campaign Management",
-  "management": "Management",
+  "head": {
+    "dashboard": {
+      "title": "Dashboard - {{titlePostFix}}",
+      "description": "View an overview of key campaign metrics and performance data."
+    },
+    "campaignList": {
+      "title": "Campaign List - {{titlePostFix}}",
+      "description": "Explore the list of campaigns and select one to view its details."
+    },
+    "campaignDetails": {
+      "title": "Campaign Details - {{titlePostFix}}",
+      "description": "Dive into the details of your selected campaign and manage its components."
+    },
+    "lineItemDetails": {
+      "title": "Line Item Details - {{titlePostFix}}",
+      "description": "Access detailed information about specific line items, including related invoices and data."
+    },
+    "invoiceList": {
+      "title": "Invoice List - {{titlePostFix}}",
+      "description": "Browse the list of invoices and select one to review its details."
+    },
+    "invoiceDetails": {
+      "title": "Invoice Details - {{titlePostFix}}",
+      "description": "Review detailed invoice information, adjust amounts, and manage related line items."
+    },
+    "settings": {
+      "title": "Settings - {{titlePostFix}}",
+      "description": "Customize your experience by adjusting settings such as theme and language."
+    }
+  },
+  "campaignManagementSystem": "Campaign Management System",
+  "managementModules": "Management Modules",
   "dashboard": "Dashboard",
   "campaign": "Campaign",
   "campaigns": "Campaigns",

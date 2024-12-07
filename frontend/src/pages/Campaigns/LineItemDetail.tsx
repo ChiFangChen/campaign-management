@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
@@ -45,33 +46,41 @@ export const LineItemDetail = () => {
   ];
 
   return (
-    <div>
-      <Breadcrumb isLoading={isLoading} list={breadcrumbList} />
-      <Title>{data?.name || <Skeleton className="h-6" />}</Title>
-      <div className="grid w-full mt-2 grid-cols-1 sm:grid-cols-8">
-        <div className="sm:col-span-5">
-          <h2 className="text-lg mt-2">{t('invoices')}</h2>
-          <Table
-            columns={invoiceColumns}
-            data={data?.invoices || []}
-            isFetching={isFetching}
-            isLoading={isLoading}
-            paginationState={paginationState}
-            onRowClick={(row) => {
-              navigate(`${routes.invoices}/${row.original.id}`);
-            }}
-            goTopOnPaging={false}
-            manualPagination={false}
-          />
-        </div>
-        <div className="sm:col-span-3 flex flex-col">
-          <SingleAmountComparisonChart
-            actualAmount={data?.actualAmount}
-            bookedAmount={data?.bookedAmount}
-          />
-          <div className="text-center text-xs">{t('amount')}</div>
+    <>
+      <Helmet>
+        <title>
+          {t('head.lineItemDetails.title', { titlePostFix: t('campaignManagementSystem') })}
+        </title>
+        <meta name="description" content={t('head.lineItemDetails.description')} />
+      </Helmet>
+      <div>
+        <Breadcrumb isLoading={isLoading} list={breadcrumbList} />
+        <Title>{data?.name || <Skeleton className="h-6" />}</Title>
+        <div className="grid w-full mt-2 grid-cols-1 sm:grid-cols-8">
+          <div className="sm:col-span-5">
+            <h2 className="text-lg mt-2">{t('invoices')}</h2>
+            <Table
+              columns={invoiceColumns}
+              data={data?.invoices || []}
+              isFetching={isFetching}
+              isLoading={isLoading}
+              paginationState={paginationState}
+              onRowClick={(row) => {
+                navigate(`${routes.invoices}/${row.original.id}`);
+              }}
+              goTopOnPaging={false}
+              manualPagination={false}
+            />
+          </div>
+          <div className="sm:col-span-3 flex flex-col">
+            <SingleAmountComparisonChart
+              actualAmount={data?.actualAmount}
+              bookedAmount={data?.bookedAmount}
+            />
+            <div className="text-center text-xs">{t('amount')}</div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

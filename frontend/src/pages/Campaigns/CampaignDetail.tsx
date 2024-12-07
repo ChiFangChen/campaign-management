@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
 import { ColumnDef, Row } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
@@ -127,28 +128,36 @@ export const CampaignDetail = () => {
   };
 
   return (
-    <div>
-      <Breadcrumb isLoading={isLoading} list={breadcrumbList} />
-      <Title>{data?.name || <Skeleton className="h-6" />}</Title>
-      <MultiAmountComparisonChart data={data?.lineItems || []} />
+    <>
+      <Helmet>
+        <title>
+          {t('head.campaignDetails.title', { titlePostFix: t('campaignManagementSystem') })}
+        </title>
+        <meta name="description" content={t('head.campaignDetails.description')} />
+      </Helmet>
       <div>
-        <h2 className="text-lg mt-2">{t('lineItems')}</h2>
-        <Table
-          columns={lineItemColumns}
-          data={data?.lineItems || []}
-          isFetching={isFetching}
-          isLoading={isLoading}
-          paginationState={paginationState}
-          filtersState={filtersState}
-          sortingState={sortingState}
-          onRowClick={(row) => {
-            navigate(`${routes.lineItems}/${row.original.id}`);
-          }}
-          goTopOnPaging={false}
-          manualPagination={false}
-          footer={renderFooter}
-        />
+        <Breadcrumb isLoading={isLoading} list={breadcrumbList} />
+        <Title>{data?.name || <Skeleton className="h-6" />}</Title>
+        <MultiAmountComparisonChart data={data?.lineItems || []} />
+        <div>
+          <h2 className="text-lg mt-2">{t('lineItems')}</h2>
+          <Table
+            columns={lineItemColumns}
+            data={data?.lineItems || []}
+            isFetching={isFetching}
+            isLoading={isLoading}
+            paginationState={paginationState}
+            filtersState={filtersState}
+            sortingState={sortingState}
+            onRowClick={(row) => {
+              navigate(`${routes.lineItems}/${row.original.id}`);
+            }}
+            goTopOnPaging={false}
+            manualPagination={false}
+            footer={renderFooter}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
