@@ -16,6 +16,10 @@ export const CampaignList = () => {
 
   const columns: ColumnDef<Campaign>[] = [
     {
+      accessorKey: 'id',
+      header: t('id'),
+    },
+    {
       accessorKey: 'name',
       header: t('name'),
     },

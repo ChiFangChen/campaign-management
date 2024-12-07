@@ -64,6 +64,7 @@
   "exportAs": "匯出為",
   "unknownError": "未知錯誤",
   "somethingGotWrong": "發生錯誤",
+  "ID: {{id}}": "識別號：{{id}}",
   "Total {{name}}": "總{{name}}",
   "Go to {{type}} Page": "前往{{type}}",
   "Filter {{name}}": "篩選{{name}}",

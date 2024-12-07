@@ -64,6 +64,7 @@
   "exportAs": "Export As",
   "unknownError": "Unknown error",
   "somethingGotWrong": "Something got wrong",
+  "ID: {{id}}": "ID: {{id}}",
   "Total {{name}}": "Total {{name}}",
   "Go to {{type}} Page": "Go to {{type}} Page",
   "Filter {{name}}": "Filter {{name}}",

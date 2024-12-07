@@ -37,6 +37,10 @@ export const CampaignDetails = () => {
 
   const lineItemColumns: ColumnDef<CampaignDetailsLineItem>[] = [
     {
+      accessorKey: 'id',
+      header: t('id'),
+    },
+    {
       id: 'name',
       accessorKey: 'name',
       header: t('name'),
@@ -72,7 +76,7 @@ export const CampaignDetails = () => {
               key={invoice.id}
               content={
                 <>
-                  <div>{invoice.id}</div>
+                  <div>{t('ID: {{id}}', { id: invoice.id })}</div>
                   <div>{t('Created: {{time}}', { time: readableTime(invoice.createdAt) })}</div>
                   <div>
                     {t('Last Updated: {{time}}', { time: readableTime(invoice.updatedAt) })}
