@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/chart';
 
 type MultiAmountComparisonChartProps = {
-  data?: CampaignDetailLineItem[];
+  data?: CampaignDetailsLineItem[];
 };
 export const MultiAmountComparisonChart = ({ data }: MultiAmountComparisonChartProps) => {
   const { t } = useTranslation();

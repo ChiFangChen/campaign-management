@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchLineItemDetail } from '@/apis';
-import { getDetailKeys } from './utils';
+import { fetchLineItemDetails } from '@/apis';
+import { getDetailsKeys } from './utils';
 
 const moduleName = 'line-items';
 
 export const LineItemsQueryKeys = {
-  detail: getDetailKeys(moduleName),
+  detail: getDetailsKeys(moduleName),
 };
 
-export const useLineItemDetail = (id: string) =>
-  useQuery({ queryKey: LineItemsQueryKeys.detail(id), queryFn: () => fetchLineItemDetail(id) });
+export const useLineItemDetails = (id: string) =>
+  useQuery({ queryKey: LineItemsQueryKeys.detail(id), queryFn: () => fetchLineItemDetails(id) });

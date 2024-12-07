@@ -1,13 +1,13 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
-import { fetchCampaigns, fetchCampaignDetail } from '@/apis';
-import { getAllKeys, getDetailKeys } from './utils';
+import { fetchCampaigns, fetchCampaignDetails } from '@/apis';
+import { getAllKeys, getDetailsKeys } from './utils';
 
 const moduleName = 'campaigns';
 
 export const CampaignsQueryKeys = {
   all: getAllKeys(moduleName),
-  detail: getDetailKeys(moduleName),
+  detail: getDetailsKeys(moduleName),
 };
 
 export const useCampaigns = (paginationParams: PaginationParams) =>
@@ -17,5 +17,5 @@ export const useCampaigns = (paginationParams: PaginationParams) =>
     placeholderData: keepPreviousData,
   });
 
-export const useCampaignDetail = (id: string) =>
-  useQuery({ queryKey: CampaignsQueryKeys.detail(id), queryFn: () => fetchCampaignDetail(id) });
+export const useCampaignDetails = (id: string) =>
+  useQuery({ queryKey: CampaignsQueryKeys.detail(id), queryFn: () => fetchCampaignDetails(id) });

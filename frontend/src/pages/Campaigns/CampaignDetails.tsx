@@ -5,7 +5,7 @@ import { ColumnDef, Row } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
-import { useCampaignDetail } from '@/queries/campaigns';
+import { useCampaignDetails } from '@/queries/campaigns';
 import { usePagination, useTableFilters, useTableSorting } from '@/hooks';
 import {
   Breadcrumb,
@@ -19,11 +19,11 @@ import {
 } from '@/components';
 import { TableRow, TableCell } from '@/components/ui/table';
 
-export const CampaignDetail = () => {
+export const CampaignDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { data, isLoading, isFetching } = useCampaignDetail(id as string);
+  const { data, isLoading, isFetching } = useCampaignDetails(id as string);
   const paginationState = usePagination();
   const filtersState = useTableFilters();
   const sortingState = useTableSorting();
@@ -35,7 +35,7 @@ export const CampaignDetail = () => {
     },
   ];
 
-  const lineItemColumns: ColumnDef<CampaignDetailLineItem>[] = [
+  const lineItemColumns: ColumnDef<CampaignDetailsLineItem>[] = [
     {
       id: 'name',
       accessorKey: 'name',
@@ -108,7 +108,7 @@ export const CampaignDetail = () => {
     },
   ];
 
-  const renderFooter = (filteredLineItemData: Row<CampaignDetailLineItem>[]) => {
+  const renderFooter = (filteredLineItemData: Row<CampaignDetailsLineItem>[]) => {
     const totalBookedAmount = filteredLineItemData.reduce(
       (acc, item) => acc + item.original.bookedAmount,
       0

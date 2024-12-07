@@ -15,7 +15,7 @@ export const fetchCampaigns = async (paginationParams: PaginationParams) => {
   return response.data;
 };
 
-export const fetchCampaignDetail = async (id: string) => {
-  const response = await axiosInstance.get<CampaignDetail>(CampaignsAPI.detail(id));
+export const fetchCampaignDetails = async (id: string) => {
+  const response = await axiosInstance.get<CampaignDetails>(CampaignsAPI.detail(id));
   return response.data;
 };

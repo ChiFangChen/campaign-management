@@ -60,7 +60,7 @@ declare global {
     lineItemsCount: number;
   };
 
-  type CampaignDetailLineItem = {
+  type CampaignDetailsLineItem = {
     id: number;
     name: string;
     actualAmount: number;
@@ -72,13 +72,13 @@ declare global {
     }[];
   };
 
-  type CampaignDetail = {
+  type CampaignDetails = {
     id: number;
     name: string;
-    lineItems: CampaignDetailLineItem[];
+    lineItems: CampaignDetailsLineItem[];
   };
 
-  type LineItemDetail = {
+  type LineItemDetails = {
     id: number;
     name: string;
     actualAmount: number;
@@ -98,24 +98,24 @@ declare global {
     totalAmount: number;
   };
 
-  type InvoiceDetailCampaignLineItem = {
+  type InvoiceDetailsCampaignLineItem = {
     id: number;
     name: string;
     actualAmount: number;
   };
 
-  type InvoiceDetailCampaign = BasicItem & {
+  type InvoiceDetailsCampaign = BasicItem & {
     totalAmount: number;
-    lineItems: InvoiceDetailCampaignLineItem[];
+    lineItems: InvoiceDetailsCampaignLineItem[];
   };
 
-  type InvoiceDetail = {
+  type InvoiceDetails = {
     id: number;
     createdAt: string;
     updatedAt: string;
     adjustments: number;
     totalActualAmount: number;
-    campaigns: InvoiceDetailCampaign[];
+    campaigns: InvoiceDetailsCampaign[];
   };
 
   type ComparisonData = {

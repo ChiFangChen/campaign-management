@@ -30,14 +30,14 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 type CampaignCardProps = {
-  campaign: InvoiceDetailCampaign;
+  campaign: InvoiceDetailsCampaign;
 };
 
 export const CampaignCard = ({ campaign }: CampaignCardProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const columns: ColumnDef<InvoiceDetailCampaignLineItem>[] = [
+  const columns: ColumnDef<InvoiceDetailsCampaignLineItem>[] = [
     {
       accessorKey: 'id',
       header: t('id'),

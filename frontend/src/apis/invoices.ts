@@ -15,8 +15,8 @@ export const fetchInvoices = async (paginationParams: PaginationParams) => {
   return response.data;
 };
 
-export const fetchInvoiceDetail = async (id: string) => {
-  const response = await axiosInstance.get<InvoiceDetail>(InvoicesAPI.detail(id));
+export const fetchInvoiceDetails = async (id: string) => {
+  const response = await axiosInstance.get<InvoiceDetails>(InvoicesAPI.detail(id));
   return response.data;
 };
 

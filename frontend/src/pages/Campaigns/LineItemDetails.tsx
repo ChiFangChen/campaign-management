@@ -6,14 +6,14 @@ import { ColumnDef } from '@tanstack/react-table';
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
 import { usePagination } from '@/hooks';
-import { useLineItemDetail } from '@/queries/line-items';
+import { useLineItemDetails } from '@/queries/line-items';
 import { Breadcrumb, Title, Table, SingleAmountComparisonChart, Skeleton } from '@/components';
 
-export const LineItemDetail = () => {
+export const LineItemDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { data, isLoading, isFetching } = useLineItemDetail(id as string);
+  const { data, isLoading, isFetching } = useLineItemDetails(id as string);
   const paginationState = usePagination();
 
   const breadcrumbList = [

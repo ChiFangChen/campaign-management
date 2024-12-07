@@ -27,7 +27,7 @@ export function getFormattedDateTimeForFilename() {
 
 type FlattenDataTable = { [key: string]: number | string }[];
 
-export function flattenDataToTable(data: InvoiceDetail) {
+export function flattenDataToTable(data: InvoiceDetails) {
   const { t } = i18n;
   const table: FlattenDataTable = [];
 

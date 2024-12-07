@@ -18,7 +18,7 @@ import {
 } from '@/components';
 
 type ExportButtonProps = {
-  data: InvoiceDetail;
+  data: InvoiceDetails;
 };
 
 type ExportFileType = 'csv' | 'xls';

@@ -7,7 +7,7 @@ const LineItemsAPI: Omit<ResourceApi, 'list'> = {
   delete: (id) => `/line_items/${id}`,
 };
 
-export const fetchLineItemDetail = async (id: string) => {
-  const response = await axiosInstance.get<LineItemDetail>(LineItemsAPI.detail(id));
+export const fetchLineItemDetails = async (id: string) => {
+  const response = await axiosInstance.get<LineItemDetails>(LineItemsAPI.detail(id));
   return response.data;
 };

@@ -7,7 +7,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
-import { useInvoiceDetail } from '@/queries/invoices';
+import { useInvoiceDetails } from '@/queries/invoices';
 import { Breadcrumb, Title, Skeleton } from '@/components';
 import { AmountCard } from './AmountCard';
 import { CampaignCard, SkeletonCampaignCard } from './CampaignCard';
@@ -18,11 +18,11 @@ const ScrollArea = styled.div`
   padding-right: 14px;
 `;
 
-export const InvoiceDetail = () => {
+export const InvoiceDetails = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const listRef = useRef<HTMLDivElement | null>(null);
-  const { data } = useInvoiceDetail(id as string);
+  const { data } = useInvoiceDetails(id as string);
 
   const breadcrumbList = [
     {

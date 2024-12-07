@@ -1,13 +1,13 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
-import { fetchInvoices, fetchInvoiceDetail } from '@/apis';
-import { getAllKeys, getDetailKeys } from './utils';
+import { fetchInvoices, fetchInvoiceDetails } from '@/apis';
+import { getAllKeys, getDetailsKeys } from './utils';
 
 export const moduleName = 'invoices';
 
 export const InvoicesQueryKeys = {
   all: getAllKeys(moduleName),
-  detail: getDetailKeys(moduleName),
+  detail: getDetailsKeys(moduleName),
 };
 
 export const useInvoices = (paginationParams: PaginationParams) =>
@@ -17,5 +17,5 @@ export const useInvoices = (paginationParams: PaginationParams) =>
     placeholderData: keepPreviousData,
   });
 
-export const useInvoiceDetail = (id: string) =>
-  useQuery({ queryKey: InvoicesQueryKeys.detail(id), queryFn: () => fetchInvoiceDetail(id) });
+export const useInvoiceDetails = (id: string) =>
+  useQuery({ queryKey: InvoicesQueryKeys.detail(id), queryFn: () => fetchInvoiceDetails(id) });

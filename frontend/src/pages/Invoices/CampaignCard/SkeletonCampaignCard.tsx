@@ -30,7 +30,7 @@ const StyledCardContent = styled(CardContent)`
 export const SkeletonCampaignCard = () => {
   const { t } = useTranslation();
 
-  const columns: ColumnDef<InvoiceDetailCampaignLineItem>[] = [
+  const columns: ColumnDef<InvoiceDetailsCampaignLineItem>[] = [
     {
       accessorKey: 'id',
       header: t('id'),

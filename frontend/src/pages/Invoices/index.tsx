@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { InvoiceList } from './InvoiceList';
-import { InvoiceDetail } from './InvoiceDetail';
+import { InvoiceDetails } from './InvoiceDetails';
 
 export const Invoices = () => {
   return (
     <Routes>
       <Route path="/" element={<InvoiceList />} />
-      <Route path=":id" element={<InvoiceDetail />} />
+      <Route path=":id" element={<InvoiceDetails />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
