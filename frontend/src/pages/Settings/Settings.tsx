@@ -42,20 +42,20 @@ export const Settings = () => {
 
   return (
     <div>
-      <Title>{t('settings.title')}</Title>
+      <Title>{t('settings')}</Title>
       <div className="my-8 gap-4 flex flex-wrap">
         <div className="flex gap-4 items-center w-full">
           <Label className="w-16" htmlFor="theme">
-            {t('settings.theme')}
+            {t('theme')}
           </Label>
           <div className="flex items-center gap-2">
-            <Label>{t('settings.light')}</Label>
+            <Label>{t('light')}</Label>
             <Switch id="theme" checked={theme === 'dark'} onCheckedChange={handleThemeChange} />
-            <Label>{t('settings.dark')}</Label>
+            <Label>{t('dark')}</Label>
           </div>
         </div>
         <div className="flex gap-4 items-center w-full">
-          <Label className="w-16">{t('settings.language')}</Label>
+          <Label className="w-16">{t('language')}</Label>
           <Select value={language} onValueChange={handleLanguageChange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue id="language" />

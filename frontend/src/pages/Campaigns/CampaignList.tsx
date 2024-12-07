@@ -1,51 +1,53 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
 import { useCampaigns } from '@/queries/campaigns';
 import { usePagination } from '@/hooks';
 import { Title, Table } from '@/components';
 
-const columns: ColumnDef<Campaign>[] = [
-  {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'lineItemsCount',
-    header: 'Line Item Count',
-  },
-  {
-    accessorKey: 'bookedTotalAmount',
-    header: 'Booked Amount',
-    meta: {
-      type: 'currency',
-    },
-  },
-  {
-    accessorKey: 'actualTotalAmount',
-    header: 'Actual Amount',
-    meta: {
-      type: 'currency',
-    },
-  },
-  {
-    accessorKey: 'invoicesCount',
-    header: 'Invoice Count',
-    meta: {
-      className: 'text-right',
-    },
-  },
-];
-
 export const CampaignList = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const paginationState = usePagination();
   const { data, isLoading, isFetching } = useCampaigns(paginationState.pagination);
 
+  const columns: ColumnDef<Campaign>[] = [
+    {
+      accessorKey: 'name',
+      header: t('name'),
+    },
+    {
+      accessorKey: 'lineItemsCount',
+      header: t('lineItemCount'),
+    },
+    {
+      accessorKey: 'bookedTotalAmount',
+      header: t('bookedAmount'),
+      meta: {
+        type: 'currency',
+      },
+    },
+    {
+      accessorKey: 'actualTotalAmount',
+      header: t('actualAmount'),
+      meta: {
+        type: 'currency',
+      },
+    },
+    {
+      accessorKey: 'invoicesCount',
+      header: t('invoiceCount'),
+      meta: {
+        align: 'right',
+      },
+    },
+  ];
+
   return (
     <div>
-      <Title>Campaigns</Title>
+      <Title>{t('campaigns')}</Title>
       <Table
         columns={columns}
         data={data?.data}

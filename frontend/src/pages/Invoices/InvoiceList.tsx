@@ -1,5 +1,6 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
@@ -7,36 +8,37 @@ import { usePagination } from '@/hooks';
 import { useInvoices } from '@/queries/invoices';
 import { Title, Table } from '@/components';
 
-const columns: ColumnDef<Invoice>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
-    accessorFn: ({ createdAt }) => readableTime(createdAt),
-    header: 'Created At',
-  },
-  {
-    accessorFn: ({ updatedAt }) => readableTime(updatedAt),
-    header: 'Last Updated At',
-  },
-  {
-    accessorKey: 'totalAmount',
-    header: 'Total Amount',
-    meta: {
-      type: 'currency',
-    },
-  },
-];
-
 export const InvoiceList = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const paginationState = usePagination();
   const { data, isLoading, isFetching } = useInvoices(paginationState.pagination);
 
+  const columns: ColumnDef<Invoice>[] = [
+    {
+      accessorKey: 'id',
+      header: t('id'),
+    },
+    {
+      accessorFn: ({ createdAt }) => readableTime(createdAt),
+      header: t('createdAt'),
+    },
+    {
+      accessorFn: ({ updatedAt }) => readableTime(updatedAt),
+      header: t('lastUpdatedAt'),
+    },
+    {
+      accessorKey: 'totalAmount',
+      header: t('Total {{name}}', { name: t('amount') }),
+      meta: {
+        type: 'currency',
+      },
+    },
+  ];
+
   return (
     <div>
-      <Title>Invoices</Title>
+      <Title>{t('invoices')}</Title>
       <Table
         columns={columns}
         data={data?.data}

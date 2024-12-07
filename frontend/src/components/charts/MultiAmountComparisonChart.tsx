@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Bar, BarChart } from 'recharts';
 
 import { chartConfig } from '@/constants';
@@ -14,6 +15,7 @@ type MultiAmountComparisonChartProps = {
   data?: CampaignDetailLineItem[];
 };
 export const MultiAmountComparisonChart = ({ data }: MultiAmountComparisonChartProps) => {
+  const { t } = useTranslation();
   const chartData = data?.map((lineItem) => ({
     name: lineItem.name,
     booked: lineItem.bookedAmount,
@@ -29,11 +31,14 @@ export const MultiAmountComparisonChart = ({ data }: MultiAmountComparisonChartP
                 const dataIndex = payload?.[0]?.payload;
                 return dataIndex?.name || value;
               }}
+              nameFormatter={(value) => t(value as string)}
               valueFormatter={(value) => formatAmount(value as number)}
             />
           }
         />
-        <ChartLegend content={<ChartLegendContent />} />
+        <ChartLegend
+          content={<ChartLegendContent labelFormatter={(value) => t(value as string)} />}
+        />
         <Bar dataKey="booked" fill="var(--color-booked)" radius={4} />
         <Bar dataKey="actual" fill="var(--color-actual)" radius={4} />
       </BarChart>

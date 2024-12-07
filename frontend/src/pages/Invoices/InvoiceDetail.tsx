@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useVirtualizer } from '@tanstack/react-virtual';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
@@ -16,17 +17,18 @@ const ScrollArea = styled.div`
   padding-right: 14px;
 `;
 
-const breadcrumbList = [
-  {
-    name: 'Invoices',
-    url: routes.invoices,
-  },
-];
-
 export const InvoiceDetail = () => {
   const { id } = useParams();
+  const { t } = useTranslation();
   const listRef = useRef<HTMLDivElement | null>(null);
   const { data } = useInvoiceDetail(id as string);
+
+  const breadcrumbList = [
+    {
+      name: t('invoices'),
+      url: routes.invoices,
+    },
+  ];
 
   const rowVirtualizer = useVirtualizer({
     count: data?.campaigns.length || 0,
@@ -46,8 +48,8 @@ export const InvoiceDetail = () => {
               <ExportButton data={data} />
             </Title>
             <div className="text-xs text-gray-500 text-right">
-              <div>Created: {readableTime(data.createdAt)}</div>
-              <div>Last Updated: {readableTime(data.updatedAt)}</div>
+              <div>{t('Created: {{time}}', { time: readableTime(data.createdAt) })}</div>
+              <div>{t('Last Updated: {{time}}', { time: readableTime(data.updatedAt) })}</div>
             </div>
           </>
         ) : (

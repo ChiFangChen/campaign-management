@@ -1,6 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { ColumnDef } from '@tanstack/react-table';
+import { useTranslation } from 'react-i18next';
 import { styled } from 'styled-components';
+import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
 import {
@@ -28,36 +29,37 @@ const StyledCardContent = styled(CardContent)`
   }
 `;
 
-const columns: ColumnDef<InvoiceDetailCampaignLineItem>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'actualAmount',
-    header: 'Amount',
-    meta: {
-      type: 'currency',
-    },
-  },
-];
-
 type CampaignCardProps = {
   campaign: InvoiceDetailCampaign;
 };
 
 export const CampaignCard = ({ campaign }: CampaignCardProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const columns: ColumnDef<InvoiceDetailCampaignLineItem>[] = [
+    {
+      accessorKey: 'id',
+      header: t('id'),
+    },
+    {
+      accessorKey: 'name',
+      header: t('name'),
+    },
+    {
+      accessorKey: 'actualAmount',
+      header: t('amount'),
+      meta: {
+        type: 'currency',
+      },
+    },
+  ];
 
   return (
     <Card>
       <CardHeader className="pb-4">
         <CardDescription className="flex justify-between mb-1">
-          <span>Campaign</span>
+          <span>{t('campaign')}</span>
           <span>{campaign.id}</span>
         </CardDescription>
         <CardTitle>
@@ -76,10 +78,13 @@ export const CampaignCard = ({ campaign }: CampaignCardProps) => {
           isBordered={false}
           footer={
             <TableRow>
-              <TableCell colSpan={2} className="bg-white">
-                Total
+              <TableCell colSpan={2} className="bg-white dark:bg-background">
+                {t('total')}
               </TableCell>
-              <AmountTableCell amount={campaign.totalAmount} className="bg-white" />
+              <AmountTableCell
+                amount={campaign.totalAmount}
+                className="bg-white dark:bg-background"
+              />
             </TableRow>
           }
         />

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Controller } from 'react-hook-form';
 import { InferType, object, number } from 'yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -13,7 +14,7 @@ import { moduleName } from '@/queries/invoices';
 import { Popover, PopoverContent, PopoverTrigger, Input, Button, Loader } from '@/components';
 
 const schema = object().shape({
-  amount: number().typeError('Please input number').nullable().required('The field is required'),
+  amount: number().nullable().required('isRequired'),
 });
 
 type FormData = InferType<typeof schema>;
@@ -28,6 +29,7 @@ type AmountPopoverProps = {
 };
 
 export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountPopoverProps) => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { id } = useParams() as { id: string };
@@ -44,7 +46,7 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
   const { isPending, reset, mutate } = useMutation({
     mutationFn: updateInvoice,
     onSuccess: () => {
-      toast({ title: 'Successfully updated!' });
+      toast({ title: t('updatedSuccessfully') });
       queryClient.invalidateQueries({ queryKey: [moduleName] });
       setEditPopoverOpen(false);
     },
@@ -72,20 +74,20 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
       <PopoverTrigger asChild>
         <div
           className={cn(
-            'absolute inset-0 w-full h-full rounded-xl bg-gray-300 bg-opacity-50 flex items-center justify-center group-hover:opacity-100 group-hover:cursor-pointer transition-opacity',
+            'absolute inset-0 w-full h-full rounded-xl bg-gray-300 dark:bg-black dark:bg-opacity-50 bg-opacity-50 flex items-center justify-center group-hover:opacity-100 group-hover:cursor-pointer transition-opacity',
             editPopoverOpen ? '' : 'opacity-0'
           )}
         >
-          <Edit className="w-12 h-12 text-white" />
+          <Edit className="w-12 h-12 text-white dark:text-gray-300" />
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-80 relative">
         {isPending && <Loader className="inset-0" />}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex justify-between text-sm text-gray-700 mb-2">
-            <span>Update {name}</span>
+          <div className="flex justify-between text-sm text-gray-700 dark:text-gray-400 mb-2">
+            <span>{t('Update {{name}}', { name })} </span>
             <Button type="submit" size="sm" className="h-6" disabled={isPending}>
-              Submit
+              {t('submit')}
             </Button>
           </div>
           <Controller
@@ -113,7 +115,9 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
               />
             )}
           />
-          {errors.amount && <p className="mt-1 text-sm text-red-500">{errors.amount.message}</p>}
+          {errors.amount && (
+            <p className="mt-1 text-sm text-red-500">{t(errors.amount.message as string)}</p>
+          )}
         </form>
       </PopoverContent>
     </Popover>

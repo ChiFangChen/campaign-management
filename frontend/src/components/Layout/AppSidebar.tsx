@@ -1,5 +1,7 @@
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ChartColumnIncreasing, TableProperties, Receipt, Settings } from 'lucide-react';
+
 import {
   Sidebar,
   SidebarHeader,
@@ -13,39 +15,40 @@ import {
 import { routes } from '@/routes';
 import { SidebarItem } from './SidebarItem';
 
-const routesItems = [
-  {
-    label: '',
-    items: [
-      {
-        title: 'Dashboard',
-        url: routes.dashboard,
-        icon: ChartColumnIncreasing,
-      },
-    ],
-  },
-  {
-    label: 'app',
-    items: [
-      {
-        title: 'Campaigns',
-        url: routes.campaigns,
-        icon: TableProperties,
-      },
-      {
-        title: 'Invoices',
-        url: routes.invoices,
-        icon: Receipt,
-      },
-    ],
-  },
-];
-
 export const AppSidebar = () => {
+  const { t } = useTranslation();
   const location = useLocation();
+  const routesItems = [
+    {
+      label: '',
+      items: [
+        {
+          title: t('dashboard'),
+          url: routes.dashboard,
+          icon: ChartColumnIncreasing,
+        },
+      ],
+    },
+    {
+      label: t('management'),
+      items: [
+        {
+          title: t('campaigns'),
+          url: routes.campaigns,
+          icon: TableProperties,
+        },
+        {
+          title: t('invoices'),
+          url: routes.invoices,
+          icon: Receipt,
+        },
+      ],
+    },
+  ];
+
   return (
     <Sidebar>
-      <SidebarHeader className="p-4">Campaign Management</SidebarHeader>
+      <SidebarHeader className="p-4">{t('campaignManagement')}</SidebarHeader>
       <SidebarContent>
         {routesItems.map(({ label, items }) => (
           <SidebarGroup key={label || 'key'}>
@@ -76,7 +79,7 @@ export const AppSidebar = () => {
         <SidebarMenu>
           <SidebarItem
             url={routes.settings}
-            title="Settings"
+            title={t('settings')}
             icon={Settings}
             active={location.pathname === routes.settings}
           />

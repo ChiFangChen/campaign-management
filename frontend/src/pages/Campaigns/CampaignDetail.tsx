@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ColumnDef, Row } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
@@ -17,31 +18,32 @@ import {
 } from '@/components';
 import { TableRow, TableCell } from '@/components/ui/table';
 
-const breadcrumbList = [
-  {
-    name: 'Campaigns',
-    url: routes.campaigns,
-  },
-];
-
 export const CampaignDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data, isLoading, isFetching } = useCampaignDetail(id as string);
   const paginationState = usePagination();
   const filtersState = useTableFilters();
   const sortingState = useTableSorting();
 
+  const breadcrumbList = [
+    {
+      name: t('campaigns'),
+      url: routes.campaigns,
+    },
+  ];
+
   const lineItemColumns: ColumnDef<CampaignDetailLineItem>[] = [
     {
       id: 'name',
       accessorKey: 'name',
-      header: 'Name',
+      header: t('name'),
       meta: { filterId: 'name', sortable: true },
     },
     {
       accessorKey: 'bookedAmount',
-      header: 'Booked Amount',
+      header: t('bookedAmount'),
       meta: {
         type: 'currency',
         sortable: true,
@@ -49,7 +51,7 @@ export const CampaignDetail = () => {
     },
     {
       accessorKey: 'actualAmount',
-      header: 'Actual Amount',
+      header: t('actualAmount'),
       meta: {
         type: 'currency',
         sortable: true,
@@ -57,7 +59,7 @@ export const CampaignDetail = () => {
     },
     {
       accessorKey: 'invoices',
-      header: 'Invoices',
+      header: t('invoices'),
       cell: ({
         row: {
           original: { invoices },
@@ -70,8 +72,10 @@ export const CampaignDetail = () => {
               content={
                 <>
                   <div>{invoice.id}</div>
-                  <div>Created: {readableTime(invoice.createdAt)}</div>
-                  <div>Last Updated: {readableTime(invoice.updatedAt)}</div>
+                  <div>{t('Created: {{time}}', { time: readableTime(invoice.createdAt) })}</div>
+                  <div>
+                    {t('Last Updated: {{time}}', { time: readableTime(invoice.updatedAt) })}
+                  </div>
                 </>
               }
             >
@@ -84,7 +88,7 @@ export const CampaignDetail = () => {
                 variant="ghost"
                 className="h-auto hover:bg-gray-200"
               >
-                View
+                {t('view')}
               </Button>
             </Tooltip>
           ))}
@@ -114,7 +118,7 @@ export const CampaignDetail = () => {
     );
     return (
       <TableRow>
-        <TableCell>Total</TableCell>
+        <TableCell>{t('total')}</TableCell>
         <AmountTableCell amount={totalBookedAmount} />
         <AmountTableCell amount={totalActualAmount} />
         <TableCell />
@@ -128,7 +132,7 @@ export const CampaignDetail = () => {
       <Title>{data?.name || <Skeleton className="h-6" />}</Title>
       <MultiAmountComparisonChart data={data?.lineItems || []} />
       <div>
-        <h2 className="text-lg mt-2">Line Items</h2>
+        <h2 className="text-lg mt-2">{t('lineItems')}</h2>
         <Table
           columns={lineItemColumns}
           data={data?.lineItems || []}

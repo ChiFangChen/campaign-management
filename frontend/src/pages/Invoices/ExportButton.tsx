@@ -1,5 +1,12 @@
+import { useTranslation } from 'react-i18next';
 import { FileInput } from 'lucide-react';
-import { flattenDataToTable, exportToCSV, exportToXLS } from '@/lib/file-utils';
+
+import {
+  flattenDataToTable,
+  getFormattedDateTimeForFilename,
+  exportToCSV,
+  exportToXLS,
+} from '@/lib/file-utils';
 import {
   Button,
   DropdownMenu,
@@ -25,13 +32,16 @@ const exportFileTypes: {
 ];
 
 export const ExportButton = ({ data }: ExportButtonProps) => {
+  const { t } = useTranslation();
+
   const onDownloadClick = (type: ExportFileType) => () => {
     const flattenedTable = flattenDataToTable(data);
+    const filename = `${t('export.invoice')}-${data.id}-${getFormattedDateTimeForFilename()}.xlsx`;
     if (type === 'csv') {
-      exportToCSV(data.id, flattenedTable);
+      exportToCSV(filename, flattenedTable);
       return;
     }
-    exportToXLS(data.id, flattenedTable);
+    exportToXLS(filename, flattenedTable);
   };
 
   return (
@@ -42,7 +52,7 @@ export const ExportButton = ({ data }: ExportButtonProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Export as</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('exportAs')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {exportFileTypes.map(({ label, type }) => (
           <DropdownMenuItem key={type} className="cursor-pointer" onClick={onDownloadClick(type)}>

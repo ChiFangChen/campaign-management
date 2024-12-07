@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import { mapKeys, mapValues } from 'lodash';
 
 export const camelizeKeys = <T>(obj: T): T => {
@@ -24,18 +25,29 @@ export const decamelizeKeys = <T>(obj: T): T => {
   return obj;
 };
 
-export const readableTime = (dateString: string, locale: string = 'en-US') => {
+const getLocale = () => {
+  const { language } = i18n;
+  switch (language) {
+    case 'zh':
+      return 'zh-TW';
+    case 'en':
+    default:
+      return 'en-US';
+  }
+};
+
+export const readableTime = (dateString: string) => {
   const date = new Date(dateString);
-  const formatter = new Intl.DateTimeFormat(locale, {
+  const formatter = new Intl.DateTimeFormat(getLocale(), {
     dateStyle: 'medium',
     timeStyle: 'short',
   });
   return formatter.format(date);
 };
 
-export function formatAmount(value?: number, locale = 'en-US', currency = 'USD') {
+export function formatAmount(value?: number, currency = 'USD') {
   if (value === undefined) return value;
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(getLocale(), {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,

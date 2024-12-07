@@ -1,6 +1,7 @@
+import i18n from 'i18next';
 import * as XLSX from 'xlsx';
 
-function getFormattedDateTimeForFilename() {
+export function getFormattedDateTimeForFilename() {
   const formatter = new Intl.DateTimeFormat('zh-TW', {
     year: 'numeric',
     month: '2-digit',
@@ -27,19 +28,22 @@ function getFormattedDateTimeForFilename() {
 type FlattenDataTable = { [key: string]: number | string }[];
 
 export function flattenDataToTable(data: InvoiceDetail) {
+  const { t } = i18n;
   const table: FlattenDataTable = [];
 
   data.campaigns.forEach((campaign) => {
     campaign.lineItems.forEach((item) => {
       table.push({
-        'Invoice ID': data.id,
-        Adjustments: data.adjustments,
-        'Invoice Total Amount': Number((data.adjustments + data.totalActualAmount).toFixed(2)),
-        'Campaign ID': campaign.id,
-        'Campaign Name': campaign.name,
-        'Line Item ID': item.id,
-        'Line Item Name': item.name,
-        'Line Item Actual Amount': item.actualAmount,
+        [t('export.invoiceId')]: data.id,
+        [t('export.adjustments')]: data.adjustments,
+        [t('export.invoiceTotalAmount')]: Number(
+          (data.adjustments + data.totalActualAmount).toFixed(2)
+        ),
+        [t('export.campaignId')]: campaign.id,
+        [t('export.campaignName')]: campaign.name,
+        [t('export.lineItemId')]: item.id,
+        [t('export.lineItemName')]: item.name,
+        [t('export.lineItemActualAmount')]: item.actualAmount,
       });
     });
   });
@@ -47,8 +51,8 @@ export function flattenDataToTable(data: InvoiceDetail) {
   return table;
 }
 
-export function exportToXLS(id: number, data: FlattenDataTable) {
-  const filename = `invoice-${id}-${getFormattedDateTimeForFilename()}.xlsx`;
+export function exportToXLS(name: string, data: FlattenDataTable) {
+  const filename = `${name}.xlsx`;
   const worksheet = XLSX.utils.json_to_sheet(data);
 
   const workbook = XLSX.utils.book_new();
@@ -64,8 +68,8 @@ function escapeCSVValue(value: string | number) {
   return value;
 }
 
-export function exportToCSV(id: number, data: FlattenDataTable) {
-  const filename = `invoice-${id}-${getFormattedDateTimeForFilename()}.csv`;
+export function exportToCSV(name: string, data: FlattenDataTable) {
+  const filename = `${name}.csv`;
   const csvHeaders = Object.keys(data[0]).join(',');
   const csvRows = data.map((row) => Object.values(row).map(escapeCSVValue).join(','));
   const csvContent = [csvHeaders, ...csvRows].join('\n');

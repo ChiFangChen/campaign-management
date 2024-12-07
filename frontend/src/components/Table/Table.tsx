@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+import { MoveVertical, MoveUp, MoveDown, Search } from 'lucide-react';
 import {
   ColumnDef,
   flexRender,
@@ -8,7 +10,6 @@ import {
   getFilteredRowModel,
   Row,
 } from '@tanstack/react-table';
-import { MoveVertical, MoveUp, MoveDown, Search } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { UsePaginationReturn, UseTableFiltersReturn, UseTableSortingReturn } from '@/hooks';
@@ -59,6 +60,7 @@ export const Table = <TData, TValue>({
   isBordered = true,
   footer,
 }: DataTableProps<TData, TValue>) => {
+  const { t } = useTranslation();
   const getPaginationConfig = () => ({
     onPaginationChange: paginationState!.setPagination,
     ...(manualPagination
@@ -110,74 +112,82 @@ export const Table = <TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  const { meta, header: headerText } = header.column.columnDef;
-                  return (
-                    <TableHead key={header.id} className="">
-                      <div
-                        className={cn(
-                          'flex items-center',
-                          meta?.className || '',
-                          meta?.type === 'currency' || meta?.align === 'right'
-                            ? 'text-right justify-end'
-                            : '',
-                          meta?.align === 'center' ? 'text-center justify-center' : ''
-                        )}
-                      >
-                        {header.isPlaceholder ? null : meta?.sortable ? (
-                          <div
-                            className={cn(
-                              'flex items-center',
-                              header.column.getCanSort() ? 'cursor-pointer' : ''
-                            )}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            <div>{flexRender(headerText, header.getContext())}</div>
-                            <div>
-                              {header.column.getIsSorted() ? (
-                                header.column.getIsSorted() === 'desc' ? (
-                                  <MoveDown className="h-4 text-black" />
-                                ) : (
-                                  <MoveUp className="h-4 text-black" />
-                                )
-                              ) : (
-                                <MoveVertical className="h-4" />
+                {headerGroup.headers.map(
+                  ({
+                    id,
+                    isPlaceholder,
+                    getContext,
+                    column: {
+                      getToggleSortingHandler,
+                      getCanSort,
+                      getIsSorted,
+                      getCanFilter,
+                      setFilterValue,
+                      getFilterValue,
+                      columnDef: { header: headerText, meta },
+                    },
+                  }) => {
+                    return (
+                      <TableHead key={id} className="">
+                        <div
+                          className={cn(
+                            'flex items-center',
+                            meta?.className || '',
+                            meta?.type === 'currency' || meta?.align === 'right'
+                              ? 'text-right justify-end'
+                              : '',
+                            meta?.align === 'center' ? 'text-center justify-center' : ''
+                          )}
+                        >
+                          {isPlaceholder ? null : meta?.sortable ? (
+                            <div
+                              className={cn(
+                                'flex items-center',
+                                getCanSort() ? 'cursor-pointer' : ''
                               )}
-                            </div>
-                          </div>
-                        ) : (
-                          flexRender(headerText, header.getContext())
-                        )}
-                        {meta?.filterId && header.column.getCanFilter() && (
-                          <Popover>
-                            <PopoverTrigger>
-                              <Search
-                                className={cn(
-                                  'h-4',
-                                  header.column.getFilterValue() ? 'text-black' : ''
+                              onClick={getToggleSortingHandler()}
+                            >
+                              <div>{flexRender(headerText, getContext())}</div>
+                              <div>
+                                {getIsSorted() ? (
+                                  getIsSorted() === 'desc' ? (
+                                    <MoveDown className="h-4 text-black dark:text-gray-200" />
+                                  ) : (
+                                    <MoveUp className="h-4 text-black dark:text-gray-200" />
+                                  )
+                                ) : (
+                                  <MoveVertical className="h-4" />
                                 )}
-                              />
-                            </PopoverTrigger>
-                            <PopoverContent className="w-80 flex gap-4">
-                              <Input
-                                placeholder={`Filter ${headerText}`}
-                                className="text-xs border rounded ml-0"
-                                value={(header.column.getFilterValue() as string) || ''}
-                                onChange={(e) => header.column.setFilterValue(e.target.value)}
-                              />
-                              <Button
-                                variant="outline"
-                                onClick={() => header.column.setFilterValue('')}
-                              >
-                                Reset
-                              </Button>
-                            </PopoverContent>
-                          </Popover>
-                        )}
-                      </div>
-                    </TableHead>
-                  );
-                })}
+                              </div>
+                            </div>
+                          ) : (
+                            flexRender(headerText, getContext())
+                          )}
+                          {meta?.filterId && getCanFilter() && (
+                            <Popover>
+                              <PopoverTrigger>
+                                <Search
+                                  className={cn('h-4', getFilterValue() ? 'text-black' : '')}
+                                />
+                              </PopoverTrigger>
+                              <PopoverContent className="w-80 flex gap-4">
+                                <Input
+                                  placeholder={`${t('Filter {{name}}', { name: headerText })}`}
+                                  className="text-xs border rounded ml-0"
+                                  value={(getFilterValue() as string) || ''}
+                                  onChange={(e) => setFilterValue(e.target.value)}
+                                />
+                                <Button variant="outline" onClick={() => setFilterValue('')}>
+                                  {t('reset')}
+                                </Button>
+                              </PopoverContent>
+                            </Popover>
+                          )}
+                        </div>
+                      </TableHead>
+                    );
+                  }
+                )}
               </TableRow>
             ))}
           </TableHeader>
@@ -198,28 +208,39 @@ export const Table = <TData, TValue>({
                   onClick={() => onRowClick?.(row)}
                   className={onRowClick ? 'cursor-pointer' : ''}
                 >
-                  {row.getVisibleCells().map((cell) =>
-                    cell.column.columnDef.meta?.type === 'currency' ? (
-                      <AmountTableCell
-                        key={cell.id}
-                        amount={cell.getValue() as number}
-                        className={cell.column.columnDef.meta?.className || ''}
-                      />
-                    ) : (
-                      <TableCell
-                        key={cell.id}
-                        className={cell.column.columnDef.meta?.className || ''}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    )
+                  {row.getVisibleCells().map(
+                    ({
+                      column: {
+                        columnDef: { cell, meta },
+                      },
+                      id,
+                      getValue,
+                      getContext,
+                    }) =>
+                      meta?.type === 'currency' ? (
+                        <AmountTableCell
+                          key={id}
+                          amount={getValue() as number}
+                          className={meta?.className || ''}
+                        />
+                      ) : (
+                        <TableCell
+                          key={id}
+                          className={cn(
+                            meta?.className || '',
+                            meta?.align ? `text-${meta?.align}` : ''
+                          )}
+                        >
+                          {flexRender(cell, getContext())}
+                        </TableCell>
+                      )
                   )}
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No data available
+                  {t('noDataAvailable')}
                 </TableCell>
               </TableRow>
             )}

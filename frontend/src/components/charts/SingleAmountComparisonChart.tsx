@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { XAxis, Cell, Bar, BarChart as UIBarChart } from 'recharts';
+
 import { formatAmount } from '@/lib/formatter-utils';
 import { ChartContainer } from '@/components/ui/chart';
 import { chartConfig } from '@/constants';
@@ -12,9 +14,10 @@ export function SingleAmountComparisonChart({
   bookedAmount = 0,
   actualAmount = 0,
 }: SingleBarChartProps) {
+  const { t } = useTranslation();
   const chartData = [
-    { name: 'Booked', amount: bookedAmount, color: chartConfig.booked.color },
-    { name: 'Actual', amount: actualAmount, color: chartConfig.actual.color },
+    { name: t('booked'), amount: bookedAmount, color: chartConfig.booked.color },
+    { name: t('actual'), amount: actualAmount, color: chartConfig.actual.color },
   ];
 
   return (

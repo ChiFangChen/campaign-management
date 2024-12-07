@@ -1,17 +1,19 @@
 import { useState } from 'react';
+import i18n from 'i18next';
 import {
   QueryClient,
   QueryCache,
   QueryClientProvider as RQQueryClientProvider,
 } from '@tanstack/react-query';
 
-import { useToast } from '@/hooks';
+import { toast } from '@/hooks';
 
-const getErrorHandler = (toast: ReturnType<typeof useToast>['toast']) => (error: unknown) => {
-  let title = 'Unknown Error';
+const getErrorHandler = () => (error: unknown) => {
+  const { t } = i18n;
+  let title = t('unknownError');
   let description = '';
   if (error instanceof Error) {
-    title = 'Something got wrong';
+    title = t('somethingGotWrong');
     description = error.message;
     console.error('Error Message:', error.message);
   } else {
@@ -25,16 +27,15 @@ const getErrorHandler = (toast: ReturnType<typeof useToast>['toast']) => (error:
 };
 
 export const QueryClientProvider = ({ children }: ComponentWithChildren) => {
-  const { toast } = useToast();
   const [queryClient] = useState(
     () =>
       new QueryClient({
         queryCache: new QueryCache({
-          onError: getErrorHandler(toast),
+          onError: getErrorHandler(),
         }),
         defaultOptions: {
           mutations: {
-            onError: getErrorHandler(toast),
+            onError: getErrorHandler(),
           },
           queries: {
             refetchOnWindowFocus: false,

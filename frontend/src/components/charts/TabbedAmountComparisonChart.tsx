@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+
 import { chartConfig } from '@/constants';
 import { formatAmount } from '@/lib/formatter-utils';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +18,7 @@ type TotalAmountChartProps = {
 };
 
 export function TabbedAmountComparisonChart({ isLoading, data }: TotalAmountChartProps) {
+  const { t } = useTranslation();
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>('actual');
 
   const { total, chartData } = React.useMemo(
@@ -37,7 +40,7 @@ export function TabbedAmountComparisonChart({ isLoading, data }: TotalAmountChar
     <div className="container mx-auto mt-5">
       <CardHeader className="flex flex-col items-stretch space-y-0 border-2 p-0 sm:flex-row rounded-xl">
         <div className="flex flex-1 flex-col justify-center gap-1 px-3 py-2">
-          <CardTitle>Total Amount</CardTitle>
+          <CardTitle>{t('Total {{name}}', { name: t('amount') })}</CardTitle>
         </div>
         <div className="flex">
           {['actual', 'booked'].map((key) => {
@@ -49,7 +52,7 @@ export function TabbedAmountComparisonChart({ isLoading, data }: TotalAmountChar
                 className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t-2 px-3 py-2 text-left even:border-l-2 data-[active=true]:bg-muted/50 sm:border-l-2 sm:border-t-0"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-xs text-muted-foreground">{chartConfig[chart].label}</span>
+                <span className="text-xs text-muted-foreground">{t(chartConfig[chart].label)}</span>
                 <span className="text-lg font-bold leading-none sm:text-3xl">
                   {isLoading ? (
                     <Skeleton className="h-6 w-24" />
@@ -82,6 +85,7 @@ export function TabbedAmountComparisonChart({ isLoading, data }: TotalAmountChar
                     const dataIndex = payload?.[0]?.payload;
                     return dataIndex?.name || value;
                   }}
+                  nameFormatter={(value) => t(value as string)}
                   valueFormatter={(value) => formatAmount(value as number)}
                 />
               }

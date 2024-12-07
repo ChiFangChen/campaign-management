@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
@@ -7,30 +8,16 @@ import { usePagination } from '@/hooks';
 import { useLineItemDetail } from '@/queries/line-items';
 import { Breadcrumb, Title, Table, SingleAmountComparisonChart, Skeleton } from '@/components';
 
-const invoiceColumns: ColumnDef<Omit<Invoice, 'totalAmount'>>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
-    accessorFn: ({ createdAt }) => readableTime(createdAt),
-    header: 'Created At',
-  },
-  {
-    accessorFn: ({ updatedAt }) => readableTime(updatedAt),
-    header: 'Last Updated At',
-  },
-];
-
 export const LineItemDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data, isLoading, isFetching } = useLineItemDetail(id as string);
   const paginationState = usePagination();
 
   const breadcrumbList = [
     {
-      name: 'Campaigns',
+      name: t('campaigns'),
       url: routes.campaigns,
     },
     ...(data
@@ -42,6 +29,20 @@ export const LineItemDetail = () => {
         ]
       : []),
   ];
+  const invoiceColumns: ColumnDef<Omit<Invoice, 'totalAmount'>>[] = [
+    {
+      accessorKey: 'id',
+      header: t('id'),
+    },
+    {
+      accessorFn: ({ createdAt }) => readableTime(createdAt),
+      header: t('createdAt'),
+    },
+    {
+      accessorFn: ({ updatedAt }) => readableTime(updatedAt),
+      header: t('lastUpdatedAt'),
+    },
+  ];
 
   return (
     <div>
@@ -49,7 +50,7 @@ export const LineItemDetail = () => {
       <Title>{data?.name || <Skeleton className="h-6" />}</Title>
       <div className="grid w-full mt-2 grid-cols-1 sm:grid-cols-8">
         <div className="sm:col-span-5">
-          <h2 className="text-lg mt-2">Invoices</h2>
+          <h2 className="text-lg mt-2">{t('invoices')}</h2>
           <Table
             columns={invoiceColumns}
             data={data?.invoices || []}
@@ -68,7 +69,7 @@ export const LineItemDetail = () => {
             actualAmount={data?.actualAmount}
             bookedAmount={data?.bookedAmount}
           />
-          <div className="text-center text-xs">Amount</div>
+          <div className="text-center text-xs">{t('amount')}</div>
         </div>
       </div>
     </div>
