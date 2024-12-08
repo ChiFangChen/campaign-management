@@ -128,13 +128,11 @@ declare global {
   type DashboardData = {
     totalCampaigns: number;
     totalLineItems: number;
-    totalBookedAmount: number;
-    totalActualAmount: number;
     totalAdjustments: number;
     amount: {
-      totalBookedAmount?: number;
-      totalActualAmount?: number;
-      comparisonData?: ComparisonData[];
+      totalBookedAmount: number;
+      totalActualAmount: number;
+      comparisonData: ComparisonData[];
     };
   };
 }
