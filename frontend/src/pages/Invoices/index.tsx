@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { InvoiceList } from './InvoiceList';
 import { InvoiceDetails } from './InvoiceDetails';
 
-export const Invoices = () => {
+const Invoices = () => {
   return (
     <Routes>
       <Route path="/" element={<InvoiceList />} />
@@ -12,3 +12,5 @@ export const Invoices = () => {
     </Routes>
   );
 };
+
+export default Invoices;

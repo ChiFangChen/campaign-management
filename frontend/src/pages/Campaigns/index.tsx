@@ -4,7 +4,7 @@ import { CampaignList } from './CampaignList';
 import { CampaignDetails } from './CampaignDetails';
 import { LineItemDetails } from './LineItemDetails';
 
-export const Campaigns = () => {
+const Campaigns = () => {
   return (
     <Routes>
       <Route path="/" element={<CampaignList />} />
@@ -14,3 +14,5 @@ export const Campaigns = () => {
     </Routes>
   );
 };
+
+export default Campaigns;
