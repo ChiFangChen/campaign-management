@@ -51,13 +51,14 @@ export const InvoiceDetails = () => {
         <div className="flex justify-between">
           {data ? (
             <>
-              <Title>
-                {data.id}
+              <Title>{data.id}</Title>
+              <div className="flex items-center">
+                <div className="text-xs text-gray-500 text-right">
+                  <div>{t('Created: {{time}}', { time: readableTime(data.createdAt) })}</div>
+                  <div>{t('Last Updated: {{time}}', { time: readableTime(data.updatedAt) })}</div>
+                </div>
+
                 <ExportButton data={data} />
-              </Title>
-              <div className="text-xs text-gray-500 text-right">
-                <div>{t('Created: {{time}}', { time: readableTime(data.createdAt) })}</div>
-                <div>{t('Last Updated: {{time}}', { time: readableTime(data.updatedAt) })}</div>
               </div>
             </>
           ) : (
