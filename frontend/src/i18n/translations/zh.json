@@ -58,6 +58,7 @@
   "lastUpdatedAt": "最後更新時間",
   "reset": "重置",
   "submit": "提交",
+  "loading": "載入中",
   "noDataAvailable": "沒有可獲取的資料",
   "previous": "上一頁",
   "next": "下一頁",
