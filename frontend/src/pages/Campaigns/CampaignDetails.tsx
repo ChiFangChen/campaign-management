@@ -123,7 +123,7 @@ export const CampaignDetails = () => {
     );
     return (
       <TableRow>
-        <TableCell>{t('total')}</TableCell>
+        <TableCell colSpan={2}>{t('total')}</TableCell>
         <AmountTableCell amount={totalBookedAmount} />
         <AmountTableCell amount={totalActualAmount} />
         <TableCell />

@@ -167,7 +167,10 @@ export const Table = <TData, TValue>({
                             <Popover>
                               <PopoverTrigger>
                                 <Search
-                                  className={cn('h-4', getFilterValue() ? 'text-black' : '')}
+                                  className={cn(
+                                    'h-4',
+                                    getFilterValue() ? 'text-black dark:text-gray-200' : ''
+                                  )}
                                 />
                               </PopoverTrigger>
                               <PopoverContent className="w-80 flex gap-4">
