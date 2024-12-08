@@ -63,7 +63,7 @@ export const CampaignCard = ({ campaign }: CampaignCardProps) => {
           <span>{campaign.id}</span>
         </CardDescription>
         <CardTitle>
-          <Link to={`${routes.lineItems}/${campaign.id}`} className="hover:text-gray-700">
+          <Link to={`${routes.campaigns}/${campaign.id}`} className="hover:text-gray-700">
             {campaign.name}
           </Link>
         </CardTitle>
