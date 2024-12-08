@@ -2,7 +2,7 @@
 
 Manage campaigns, line items, and invoices seamlessly in this powerful application.
 
-[Visit the live application](https://campaign-management.onrender.com)  
+[Visit the live application](https://campaign-management-kiki.vercel.app/)  
 **Note:** The backend is hosted on Render (free tier), so the first request may incur a delay (~50 seconds). Please be patient.
 
 ---
