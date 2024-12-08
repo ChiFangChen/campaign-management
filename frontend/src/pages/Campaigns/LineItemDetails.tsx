@@ -6,7 +6,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
 import { usePagination } from '@/hooks';
-import { useLineItemDetails } from '@/queries/line-items';
+import { useLineItemDetails } from '@/queries';
 import { Breadcrumb, Title, Table, SingleAmountComparisonChart, Skeleton } from '@/components';
 
 export const LineItemDetails = () => {

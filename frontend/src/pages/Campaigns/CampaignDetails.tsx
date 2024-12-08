@@ -5,7 +5,7 @@ import { ColumnDef, Row } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
-import { useCampaignDetails } from '@/queries/campaigns';
+import { useCampaignDetails } from '@/queries';
 import { usePagination, useTableFilters, useTableSorting } from '@/hooks';
 import {
   Breadcrumb,

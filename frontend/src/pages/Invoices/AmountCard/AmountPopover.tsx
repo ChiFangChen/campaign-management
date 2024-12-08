@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { formatAmount } from '@/lib/formatter-utils';
 import { useForm, useToast } from '@/hooks';
 import { updateInvoice } from '@/apis';
-import { moduleName } from '@/queries/invoices';
+import { moduleName } from '@/queries';
 import { Popover, PopoverContent, PopoverTrigger, Input, Button, Loader } from '@/components';
 
 const schema = object().shape({

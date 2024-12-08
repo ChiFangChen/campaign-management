@@ -7,7 +7,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
-import { useInvoiceDetails } from '@/queries/invoices';
+import { useInvoiceDetails } from '@/queries';
 import { Breadcrumb, Title, Skeleton } from '@/components';
 import { AmountCard } from './AmountCard';
 import { CampaignCard, SkeletonCampaignCard } from './CampaignCard';

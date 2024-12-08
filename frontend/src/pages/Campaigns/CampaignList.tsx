@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { routes } from '@/routes';
-import { useCampaigns } from '@/queries/campaigns';
+import { useCampaigns } from '@/queries';
 import { usePagination } from '@/hooks';
 import { Title, Table } from '@/components';
 

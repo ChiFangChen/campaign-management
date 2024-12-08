@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 
 import { formatAmount } from '@/lib/formatter-utils';
-import { useDashboard } from '@/queries/dashboard';
+import { useDashboard } from '@/queries';
 import { Title, TabbedAmountComparisonChart } from '@/components';
 import { DataCard } from './DataCard';
 

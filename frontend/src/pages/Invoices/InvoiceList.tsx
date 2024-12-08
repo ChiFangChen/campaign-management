@@ -6,7 +6,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { routes } from '@/routes';
 import { readableTime } from '@/lib/formatter-utils';
 import { usePagination } from '@/hooks';
-import { useInvoices } from '@/queries/invoices';
+import { useInvoices } from '@/queries';
 import { Title, Table } from '@/components';
 
 export const InvoiceList = () => {
