@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { formatAmount } from '@/lib/formatter-utils';
@@ -13,6 +13,7 @@ type AmountCardProps = {
 
 export const AmountCard = ({ type, data }: AmountCardProps) => {
   const { t } = useTranslation();
+  const amountPopoverAnchorRef = useRef<HTMLDivElement>(null);
   const isEditable = ['adjustments', 'final'].includes(type);
   const { name, amount } = useMemo(() => {
     switch (type) {
@@ -30,24 +31,24 @@ export const AmountCard = ({ type, data }: AmountCardProps) => {
   }, [type, data, t]);
 
   return (
-    <Card className="min:w-1/5 p-4 relative group">
-      <div className="pb-0 text-sm text-gray-700 dark:text-gray-500">{name}</div>
+    <Card className="min:w-1/5 p-4 relative" ref={amountPopoverAnchorRef}>
+      <div className="pb-0 text-sm text-gray-700 dark:text-gray-500 flex justify-between">
+        {name}
+
+        {typeof amount === 'number' && isEditable && (
+          <AmountPopover
+            amountPopoverAnchorRef={amountPopoverAnchorRef}
+            type={type as AmountPopoverType}
+            name={name}
+            amount={amount}
+            totalActualAmount={data?.totalActualAmount || 0}
+          />
+        )}
+      </div>
       {typeof amount === 'number' ? (
-        <>
-          <div
-            className={cn('text-3xl', type !== 'final' ? 'text-gray-900 dark:text-gray-300' : '')}
-          >
-            {formatAmount(amount)}
-          </div>
-          {isEditable && (
-            <AmountPopover
-              type={type as AmountPopoverType}
-              name={name}
-              amount={amount}
-              totalActualAmount={data?.totalActualAmount || 0}
-            />
-          )}
-        </>
+        <div className={cn('text-3xl', type !== 'final' ? 'text-gray-900 dark:text-gray-300' : '')}>
+          {formatAmount(amount)}
+        </div>
       ) : (
         <Skeleton className="h-8 mt-0.5 w-36" />
       )}

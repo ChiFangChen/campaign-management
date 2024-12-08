@@ -22,18 +22,26 @@ type FormData = InferType<typeof schema>;
 export type AmountPopoverType = 'adjustments' | 'final';
 
 type AmountPopoverProps = {
+  amountPopoverAnchorRef: React.RefObject<HTMLDivElement>;
   name: string;
   type: AmountPopoverType;
-  amount: number;
+  amount?: number;
   totalActualAmount: number;
 };
 
-export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountPopoverProps) => {
+export const AmountPopover = ({
+  amountPopoverAnchorRef,
+  name,
+  type,
+  amount,
+  totalActualAmount,
+}: AmountPopoverProps) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { id } = useParams() as { id: string };
   const [editPopoverOpen, setEditPopoverOpen] = useState(false);
+  const [popoverContentAlignOffset, setPopoverContentAlignOffset] = useState<number>(-176);
   const {
     handleSubmit,
     control,
@@ -54,6 +62,10 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
 
   const handleClick = (open: boolean) => {
     if (!isPending) {
+      if (amountPopoverAnchorRef.current) {
+        const rect = amountPopoverAnchorRef.current.getBoundingClientRect();
+        setPopoverContentAlignOffset(rect.width / 2 - 176);
+      }
       setEditPopoverOpen(open);
     }
   };
@@ -72,16 +84,15 @@ export const AmountPopover = ({ name, type, amount, totalActualAmount }: AmountP
   return (
     <Popover open={editPopoverOpen} onOpenChange={handleClick}>
       <PopoverTrigger asChild>
-        <div
-          className={cn(
-            'absolute inset-0 w-full h-full rounded-xl bg-gray-300 dark:bg-black dark:bg-opacity-50 bg-opacity-50 flex items-center justify-center group-hover:opacity-100 group-hover:cursor-pointer transition-opacity',
-            editPopoverOpen ? '' : 'opacity-0'
-          )}
-        >
-          <Edit className="w-12 h-12 text-white dark:text-gray-300" />
-        </div>
+        <Edit className="w-4 h-4 cursor-pointer text-gray-500 dark:text-gray-300" />
       </PopoverTrigger>
-      <PopoverContent className="w-80 relative">
+      <PopoverContent
+        className="w-80 relative"
+        side="top"
+        sideOffset={60}
+        align="end"
+        alignOffset={popoverContentAlignOffset}
+      >
         {isPending && <Loader className="inset-0" />}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-between text-sm text-gray-700 dark:text-gray-400 mb-2">
